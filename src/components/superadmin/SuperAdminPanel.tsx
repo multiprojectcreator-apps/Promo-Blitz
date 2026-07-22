@@ -68,7 +68,7 @@ export default function SuperAdminPanel({ currentUser }: SuperAdminPanelProps) {
     // Confirm blocking with custom warning since it cascades
     if (nextStatus === 'BLOCKED') {
       const confirmDeactivate = window.confirm(
-        `¿Está seguro de desactivar al organizador "${targetUser.name}"?\n\n¡ATENCIÓN! Esta acción es recursiva. Al desactivar este organizador, automáticamente se desactivarán todas sus licencias, vendedores y el acceso de todos sus colaboradores asociados.`
+        `¿Está seguro de desactivar al organizador "${targetUser.name}"?\n\n¡ATENCIÓN! Esta acción es recursiva. Al desactivar este organizador, automáticamente se desactivarán todas sus licencias, colaboradores y el acceso de todos sus colaboradores asociados.`
       );
       if (!confirmDeactivate) return;
     }
@@ -111,7 +111,7 @@ export default function SuperAdminPanel({ currentUser }: SuperAdminPanelProps) {
 
   const handleFactoryReset = async () => {
     const confirm1 = window.confirm(
-      '⚠️ ¡ATENCIÓN! ESTA ACCIÓN ES IRREVERSIBLE.\n\n¿Está completamente seguro de que desea reiniciar la aplicación a su CONFIGURACIÓN DE FÁBRICA ORIGINAL?\n\nEsto eliminará absolutamente todas las ventas, vendedores, boletos, clientes, anuncios y sorteos creados. Se mantendrán únicamente las credenciales de Super Administrador.'
+      '⚠️ ¡ATENCIÓN! ESTA ACCIÓN ES IRREVERSIBLE.\n\n¿Está completamente seguro de que desea reiniciar la aplicación a su CONFIGURACIÓN DE FÁBRICA ORIGINAL?\n\nEsto eliminará absolutamente todas las ventas, colaboradores, boletos, clientes, anuncios y sorteos creados. Se mantendrán únicamente las credenciales de Super Administrador.'
     );
     if (!confirm1) return;
 
@@ -216,7 +216,7 @@ export default function SuperAdminPanel({ currentUser }: SuperAdminPanelProps) {
             <Activity size={16} className="text-blue-400" />
           </div>
           <div className="text-2xl font-black text-white">{totalSellers}</div>
-          <p className="text-[10px] text-blue-300/60 mt-1">Vendedores y licencias creadas</p>
+          <p className="text-[10px] text-blue-300/60 mt-1">Colaboradores y licencias creadas</p>
         </div>
       </div>
 
@@ -491,7 +491,7 @@ export default function SuperAdminPanel({ currentUser }: SuperAdminPanelProps) {
             </p>
             <ul className="list-disc list-inside text-slate-400 space-y-1 font-mono text-[11px] pl-2">
               <li>Eliminará absolutamente todas las ventas, boletos pagados y reservas.</li>
-              <li>Eliminará todos los vendedores y licencias colaboradoras generadas.</li>
+              <li>Eliminará todos los colaboradores y licencias colaboradoras generadas.</li>
               <li>Eliminará los anuncios, sponsors y visitas de telemetría.</li>
               <li>Reiniciará las rifas a la campaña inicial de demostración en estado BORRADOR.</li>
               <li>Conserva de manera segura su cuenta de Super Administrador activa.</li>

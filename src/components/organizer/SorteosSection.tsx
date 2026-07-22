@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import confetti from 'canvas-confetti';
 import { 
   Award, 
   Sparkles, 
@@ -184,6 +185,14 @@ export default function SorteosSection({
 
         setSuccessMessage(`🎉 ¡Sorteo realizado con éxito! Ganador registrado para: ${selectedPrizeName}`);
         setWinningNumberInput('');
+
+        // Grand confetti celebration for winner announcement
+        confetti({
+          particleCount: 120,
+          spread: 100,
+          origin: { y: 0.5 },
+          colors: ['#3b82f6', '#ec4899', '#f59e0b', '#10b981', '#8b5cf6']
+        });
       } else {
         setErrorMessage(data.error || 'Error al procesar el sorteo.');
       }
@@ -804,7 +813,7 @@ export default function SorteosSection({
                     Reporte General: {reportData.raffle.name}
                   </h3>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    Estadísticas integrales de ventas, comisiones de vendedores, ganadores y rendimiento medible.
+                    Estadísticas integrales de ventas, comisiones de colaboradores, ganadores y rendimiento medible.
                   </p>
                 </div>
                 <button 
@@ -829,7 +838,7 @@ export default function SorteosSection({
                   </div>
 
                   <div className="bg-slate-950 border border-slate-850 p-3.5 rounded-2xl">
-                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Comisiones Vendedores</div>
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Comisiones Colaboradores</div>
                     <div className="text-xl font-black text-amber-400 mt-1 font-mono">
                       ${reportData.summary.totalCommissionsPaid.toLocaleString()} {reportData.summary.currency}
                     </div>
@@ -895,7 +904,7 @@ export default function SorteosSection({
                 {/* 3. Sellers Breakdown Table */}
                 <div className="space-y-2">
                   <h4 className="text-xs font-black uppercase text-purple-400 tracking-wider">
-                    Rendimiento y Comisiones de Vendedores
+                    Rendimiento y Comisiones de Colaboradores
                   </h4>
                   <div className="overflow-x-auto bg-slate-950 border border-slate-850 rounded-2xl">
                     <table className="w-full text-left text-xs border-collapse">
@@ -921,7 +930,7 @@ export default function SorteosSection({
                         {reportData.sellerStats.length === 0 && (
                           <tr>
                             <td colSpan={5} className="py-4 text-center text-slate-500 italic">
-                              No hay vendedores o licencias registrados aún.
+                              No hay colaboradores o licencias registrados aún.
                             </td>
                           </tr>
                         )}

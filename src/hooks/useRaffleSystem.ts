@@ -885,10 +885,10 @@ export function useRaffleSystem() {
         const dataLogs = await resLogs.json();
         setAuditLogs(dataLogs);
       } else {
-        setSellerCrudError(data.error || 'No se pudo crear el vendedor.');
+        setSellerCrudError(data.error || 'No se pudo crear el colaborador.');
       }
     } catch (err) {
-      setSellerCrudError('Error de red al crear vendedor.');
+      setSellerCrudError('Error de red al crear colaborador.');
     }
   };
 
@@ -920,8 +920,8 @@ export function useRaffleSystem() {
     if (!currentUser) return;
 
     showConfirm(
-      '¿Eliminar vendedor?',
-      '¿Está seguro de eliminar este vendedor de forma permanente? Se eliminará su acceso y rango de boletos.',
+      '¿Eliminar colaborador?',
+      '¿Está seguro de eliminar este colaborador de forma permanente? Se eliminará su acceso y rango de boletos.',
       async () => {
         try {
           const res = await fetch(`/api/sellers/${sellerId}`, {
@@ -1069,10 +1069,10 @@ export function useRaffleSystem() {
         email: buyerForm.email,
         city: buyerForm.city,
         notes: buyerForm.notes,
-        sellerName: sellerObjForBuyer ? sellerObjForBuyer.name : 'Vendedor Autorizado',
+        sellerName: sellerObjForBuyer ? sellerObjForBuyer.name : 'Colaborador Autorizado',
         sellerPhone: sellerObjForBuyer ? sellerObjForBuyer.phone : '+34 600 000 000',
       });
-      setBuyerSuccessMsg(`¡Reserva temporal creada! Dispone de 3 horas para contactar a su vendedor y completar el pago.`);
+      setBuyerSuccessMsg(`¡Reserva temporal creada! Dispone de 3 horas para contactar a su colaborador y completar el pago.`);
       setSelectedTickets([]);
       setIsBuyerRegisterModalOpen(false);
       setBuyerForm({
@@ -1235,7 +1235,7 @@ export function useRaffleSystem() {
     
     showConfirm(
       '¿Lanzar sorteo oficialmente?',
-      '¿Está seguro de que desea lanzar el sorteo oficialmente? Esto cambiará su estado de BORRADOR (DRAFT) a ACTIVO, habilitando de inmediato la reserva de boletos para compradores y la venta para vendedores.',
+      '¿Está seguro de que desea lanzar el sorteo oficialmente? Esto cambiará su estado de BORRADOR (DRAFT) a ACTIVO, habilitando de inmediato la reserva de boletos para compradores y la venta para colaboradores.',
       async () => {
         setIsUpdatingRaffle(true);
         setRaffleUpdateMsg('');

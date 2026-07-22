@@ -5,8 +5,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MapPin, CheckCircle2, Ticket, Sparkles, Flame, RefreshCw, Clock, Gift, Award, Smartphone, Megaphone, ExternalLink, HelpCircle, AlertTriangle, ShieldAlert, Search, Download, Share2, Check, X } from 'lucide-react';
+import confetti from 'canvas-confetti';
+import { MapPin, CheckCircle2, Ticket, Sparkles, Flame, RefreshCw, Clock, Gift, Award, Smartphone, Megaphone, ExternalLink, HelpCircle, AlertTriangle, ShieldAlert, Search, Download, Share2, Check, X, Trophy, Star, Eye } from 'lucide-react';
 import { Sale, Raffle, Seller, Announcement, AppConfig, formatPrice } from '../../types';
+import { generateTicketSVG } from '../../utils';
 import BuyerTour from './BuyerTour';
 
 // In-memory flag instead of localStorage to ensure 100% online state without local footprint
@@ -38,87 +40,6 @@ interface BuyerPanelProps {
   config: AppConfig | null;
   onOpenLegalModal?: (tab: 'terms' | 'privacy' | 'rules') => void;
 }
-
-const generateTicketSVG = (ticketNum: number, sale: Sale, raffleName: string, rafflePrize: string, currency?: string, ticketPrice?: number) => {
-  const refCode = `REF-${sale.id.substring(0, 8).toUpperCase()}`;
-  const priceText = formatPrice(ticketPrice || 10, currency);
-  const isPaid = sale.status === 'PAID' || sale.status === 'SOLD';
-  
-  // Status-specific styles
-  const statusColor = isPaid ? '#10b981' : '#f59e0b';
-  const statusDot = isPaid ? '#34d399' : '#fbbf24';
-  const statusText = isPaid ? 'SOPORTE DE RESERVA CONFIRMADO Y VALIDADO' : 'RESERVA TEMPORAL - PENDIENTE DE CONFIRMACIÓN';
-  const badgeText = isPaid ? 'CONFIRMADO' : 'RESERVA TEMPORAL';
-  const badgeTextColor = isPaid ? '#a7f3d0' : '#fef3c7';
-
-  return `
-<svg width="600" height="310" viewBox="0 0 600 310" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&amp;display=swap');
-      text {
-        font-family: 'Inter', -apple-system, sans-serif;
-      }
-    </style>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#d946ef;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
-    </linearGradient>
-    <clipPath id="ticketClip">
-      <rect x="0" y="0" width="600" height="310" rx="24" />
-    </clipPath>
-  </defs>
-  
-  <g clip-path="url(#ticketClip)">
-    <rect width="600" height="310" fill="url(#grad)" />
-    
-    <circle cx="50" cy="50" r="120" fill="white" fill-opacity="0.03" />
-    <circle cx="550" cy="260" r="100" fill="white" fill-opacity="0.04" />
-    
-    <circle cx="0" cy="155" r="18" fill="#0b0625" />
-    <circle cx="600" cy="155" r="18" fill="#0b0625" />
-    
-    <line x1="430" y1="0" x2="430" y2="310" stroke="#ffffff" stroke-dasharray="8 6" stroke-opacity="0.3" stroke-width="2" />
-    
-    <rect x="35" y="25" width="120" height="20" rx="6" fill="white" fill-opacity="0.2" />
-    <text x="95" y="38" font-family="'Inter', -apple-system, sans-serif" font-size="9" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1.5">BOLETO OFICIAL</text>
-    
-    <rect x="270" y="25" width="135" height="20" rx="6" fill="${statusColor}" fill-opacity="0.25" stroke="${statusColor}" stroke-opacity="0.5" stroke-width="1" />
-    <text x="337" y="38" font-family="'Inter', -apple-system, sans-serif" font-size="8" font-weight="900" fill="${badgeTextColor}" text-anchor="middle" letter-spacing="1">${badgeText}</text>
-    
-    <text x="170" y="38" font-family="monospace" font-size="11" font-weight="700" fill="#f5f3ff" fill-opacity="0.8">${refCode}</text>
-    
-    <text x="35" y="85" font-family="'Inter', -apple-system, sans-serif" font-size="18" font-weight="900" fill="#ffffff">${raffleName}</text>
-    <text x="35" y="108" font-family="'Inter', -apple-system, sans-serif" font-size="11" font-weight="500" fill="#f5f3ff" fill-opacity="0.9">Premio: ${rafflePrize}</text>
-    
-    <text x="35" y="160" font-family="'Inter', -apple-system, sans-serif" font-size="8" font-weight="700" fill="#e9d5ff" letter-spacing="1">TITULAR</text>
-    <text x="35" y="180" font-family="'Inter', -apple-system, sans-serif" font-size="13" font-weight="800" fill="#ffffff">${sale.buyerName}</text>
-    
-    <text x="210" y="160" font-family="'Inter', -apple-system, sans-serif" font-size="8" font-weight="700" fill="#e9d5ff" letter-spacing="1">CIUDAD</text>
-    <text x="210" y="180" font-family="'Inter', -apple-system, sans-serif" font-size="13" font-weight="800" fill="#ffffff">${sale.city || 'N/A'}</text>
-    
-    <text x="330" y="160" font-family="'Inter', -apple-system, sans-serif" font-size="8" font-weight="700" fill="#e9d5ff" letter-spacing="1">TELÉFONO</text>
-    <text x="330" y="180" font-family="monospace" font-size="11" font-weight="700" fill="#ffffff">${sale.phone}</text>
-    
-    <rect x="35" y="210" width="360" height="34" rx="8" fill="${statusColor}" fill-opacity="0.2" stroke="${statusColor}" stroke-opacity="0.4" stroke-width="1" />
-    <circle cx="50" cy="227" r="4" fill="${statusDot}" />
-    <text x="62" y="231" font-family="'Inter', -apple-system, sans-serif" font-size="9" font-weight="800" fill="${statusDot}" letter-spacing="0.5">${statusText}</text>
-    
-    <text x="515" y="75" font-family="'Inter', -apple-system, sans-serif" font-size="8" font-weight="800" fill="#e9d5ff" text-anchor="middle" letter-spacing="1">NÚMERO</text>
-    
-    <rect x="460" y="90" width="110" height="60" rx="12" fill="#0f172a" fill-opacity="0.4" />
-    <text x="515" y="132" font-family="monospace" font-size="30" font-weight="900" fill="#ffffff" text-anchor="middle">#${ticketNum}</text>
-    
-    <rect x="465" y="170" width="100" height="24" rx="8" fill="#ffffff" />
-    <text x="515" y="186" font-family="'Inter', -apple-system, sans-serif" font-size="10" font-weight="900" fill="#7c3aed" text-anchor="middle">${priceText}</text>
-    
-    <text x="515" y="245" font-family="monospace" font-size="8" fill="#f5f3ff" fill-opacity="0.7" text-anchor="middle">REG: ${sale.date}</text>
-    <text x="515" y="258" font-family="monospace" font-size="8" fill="#f5f3ff" fill-opacity="0.7" text-anchor="middle">${sale.time}</text>
-  </g>
-</svg>
-`;
-};
 
 export default function BuyerPanel({
   activeRaffle,
@@ -177,6 +98,9 @@ export default function BuyerPanel({
   // Guided Onboarding Tour
   const [isTourActive, setIsTourActive] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  // Active ticket preview modal state
+  const [previewTicketSale, setPreviewTicketSale] = useState<Sale | null>(null);
 
   // Active announcement modal state
   const [activeBuyerPromoModal, setActiveBuyerPromoModal] = useState<Announcement | null>(null);
@@ -253,61 +177,88 @@ export default function BuyerPanel({
 
   const downloadTicket = (sale: Sale, format: 'svg' | 'png' = 'png') => {
     if (!activeRaffle) return;
-    setToastMsg(`Generando boleto #${sale.ticketNumber} en formato ${format.toUpperCase()}...`);
+    setToastMsg(`Generando boleto #${sale.ticketNumber} (${format.toUpperCase()})...`);
+    
+    // Find active sponsor / announcement for the ticket
+    const activeSponsor = (announcements || []).find(a => a.status === 'ACTIVE' && (a.placement === 'COMPRADOR_SIDEBAR' || a.placement === 'COMPRADOR_FOOTER' || a.placement === 'COMPRADOR_HERO' || a.placement === 'COMPRADOR_FLOAT' || a.placement === 'COMPRADOR_MODAL'));
+
     const svgString = generateTicketSVG(
       sale.ticketNumber, 
       sale, 
       activeRaffle.name, 
       activeRaffle.prize, 
       config?.currency,
-      activeRaffle.ticketPrice
+      activeRaffle.ticketPrice,
+      activeSponsor
     );
     
-    if (format === 'svg') {
+    const fileName = `boleto_${sale.status === 'PAID' ? 'confirmado' : 'reservado'}_num_${sale.ticketNumber}`;
+
+    const fallbackSvgDownload = () => {
       const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
       const url = URL.createObjectURL(blob);
-      
       const link = document.createElement('a');
       link.href = url;
-      link.download = `boleto_${sale.status === 'PAID' ? 'confirmado' : 'reservado'}_${sale.ticketNumber}.svg`;
+      link.download = `${fileName}.svg`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
       setToastMsg(`¡Boleto #${sale.ticketNumber}.SVG descargado con éxito! 🍀`);
+    };
+
+    if (format === 'svg') {
+      fallbackSvgDownload();
     } else {
-      // Create SVG to PNG conversion via canvas
+      // SVG to PNG Conversion via Canvas using Blob URL
+      const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+      const blobUrl = URL.createObjectURL(svgBlob);
       const img = new Image();
-      const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
       
       img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = 1200; // high quality double resolution (SVG is 600x310)
-        canvas.height = 620;
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          ctx.fillStyle = '#0b0625'; // Background match
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0, 1200, 620);
-          
-          canvas.toBlob((pngBlob) => {
-            if (pngBlob) {
-              const pngUrl = URL.createObjectURL(pngBlob);
-              const link = document.createElement('a');
-              link.href = pngUrl;
-              link.download = `boleto_${sale.status === 'PAID' ? 'confirmado' : 'reservado'}_${sale.ticketNumber}.png`;
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-              URL.revokeObjectURL(pngUrl);
-              setToastMsg(`¡Boleto #${sale.ticketNumber}.PNG descargado con éxito! 🍀`);
-            }
-          }, 'image/png');
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = 1400; // High quality double resolution
+          canvas.height = 720;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.fillStyle = '#050212';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, 1400, 720);
+            
+            canvas.toBlob((pngBlob) => {
+              if (pngBlob) {
+                const pngUrl = URL.createObjectURL(pngBlob);
+                const link = document.createElement('a');
+                link.href = pngUrl;
+                link.download = `${fileName}.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(pngUrl);
+                setToastMsg(`¡Boleto #${sale.ticketNumber}.PNG descargado con éxito! 🍀`);
+              } else {
+                fallbackSvgDownload();
+              }
+            }, 'image/png');
+          } else {
+            fallbackSvgDownload();
+          }
+        } catch (err) {
+          console.error('PNG conversion error:', err);
+          fallbackSvgDownload();
+        } finally {
+          URL.revokeObjectURL(blobUrl);
         }
-        URL.revokeObjectURL(url);
       };
-      img.src = url;
+
+      img.onerror = (err) => {
+        console.error('SVG image load error for PNG rendering:', err);
+        URL.revokeObjectURL(blobUrl);
+        fallbackSvgDownload();
+      };
+
+      img.src = blobUrl;
     }
   };
 
@@ -383,6 +334,14 @@ export default function BuyerPanel({
     
     setSelectedTickets(picked);
     
+    // Fire celebratory confetti!
+    confetti({
+      particleCount: 70,
+      spread: 80,
+      origin: { y: 0.65 },
+      colors: ['#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b']
+    });
+
     // Auto-update recognized seller for selected tickets
     const firstNum = picked[0];
     const assignedSeller = sellers.find(s => firstNum >= s.assignedRangeStart && firstNum <= s.assignedRangeEnd && s.userId && s.userId.trim() !== '');
@@ -552,91 +511,139 @@ export default function BuyerPanel({
         </div>
       )}
 
-      {/* Top Banner with visual Countdown */}
-      <div className="p-6 bg-gradient-to-br from-purple-950 via-slate-900 to-pink-950 text-white border border-purple-900/30 text-center relative overflow-hidden shadow-xl rounded-3xl">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(139,92,246,0.15),transparent_60%)]"></div>
-        <div className="absolute -top-10 -left-10 w-44 h-44 bg-purple-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-10 -right-10 w-44 h-44 bg-pink-500/10 rounded-full blur-3xl"></div>
+      {/* Top Banner with Grand Prize Card & visual Countdown */}
+      <div className="p-6 md:p-8 bg-gradient-to-br from-purple-950 via-[#0a0524] to-pink-950 text-white border border-purple-500/30 text-center relative overflow-hidden shadow-2xl rounded-3xl backdrop-blur-xl">
+        {/* Animated background ambient glowing mesh */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/15 rounded-full blur-3xl pointer-events-none animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(217,70,239,0.1),transparent_70%)] pointer-events-none"></div>
 
-        <div className="flex flex-col items-center gap-2 relative z-10">
-          <span className="bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] px-3.5 py-1 rounded-full font-black uppercase tracking-wider">
-            SISTEMA DE SOLICITUD CERTIFICADO QR
-          </span>
+        <div className="relative z-10 flex flex-col items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <span className="bg-gradient-to-r from-purple-500/20 via-fuchsia-500/20 to-pink-500/20 text-purple-200 border border-purple-500/30 text-[10px] sm:text-xs px-4 py-1.5 rounded-full font-black uppercase tracking-wider shadow-sm flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-pink-400 animate-spin" style={{ animationDuration: '4s' }} />
+              Plataforma Oficial de Sorteos Transparentes
+            </span>
 
-          {/* New Countdown Component */}
-          {isSalesClosed ? (
-            <div className="mt-3">
+            {/* Countdown Component */}
+            {isSalesClosed ? (
               <span className="bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] px-4 py-1 rounded-full font-bold">
                 {activeRaffle?.salesEnabled === false ? '⏸️ REGISTROS PAUSADOS POR EL ORGANIZADOR' : '🚨 REGISTROS TOTALMENTE CERRADOS'}
               </span>
-            </div>
-          ) : (activeRaffle?.salesCutoffDate && activeRaffle?.salesCutoffTime && (
-            <div className="mt-3">
-              {timeLeft ? (
-                <div className="flex items-center gap-2.5 bg-slate-900/80 border border-purple-950/60 px-4 py-2 rounded-2xl shadow-lg">
-                  <Clock size={14} className="text-pink-400 animate-pulse" />
-                  <span className="text-[11px] text-purple-300 font-medium">El juego cierra en:</span>
-                  <div className="flex gap-1.5 font-mono text-xs font-black text-white">
-                    <span className="bg-[#050212] px-1.5 py-0.5 rounded text-pink-400 border border-purple-950/40">{timeLeft.days}d</span>
-                    <span>:</span>
-                    <span className="bg-[#050212] px-1.5 py-0.5 rounded text-pink-400 border border-purple-950/40">{timeLeft.hours}h</span>
-                    <span>:</span>
-                    <span className="bg-[#050212] px-1.5 py-0.5 rounded text-pink-400 border border-purple-950/40">{timeLeft.minutes}m</span>
-                    <span>:</span>
-                    <span className="bg-[#050212] px-1.5 py-0.5 rounded text-pink-400 border border-purple-950/40">{timeLeft.seconds}s</span>
+            ) : (activeRaffle?.salesCutoffDate && activeRaffle?.salesCutoffTime && (
+              timeLeft ? (
+                <div className="flex items-center gap-2 bg-slate-900/90 border border-purple-500/30 px-3.5 py-1 rounded-full shadow-md">
+                  <Clock size={13} className="text-pink-400 animate-pulse" />
+                  <span className="text-[10px] text-purple-300 font-bold uppercase tracking-wider">Cierre en:</span>
+                  <div className="flex gap-1 font-mono text-xs font-black text-pink-400">
+                    <span>{timeLeft.days}d</span>:
+                    <span>{timeLeft.hours}h</span>:
+                    <span>{timeLeft.minutes}m</span>:
+                    <span>{timeLeft.seconds}s</span>
                   </div>
                 </div>
               ) : (
                 <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] px-3 py-1 rounded-full font-bold animate-pulse">
                   ⏳ Cierre de registros inminente hoy
                 </span>
-              )}
-            </div>
-          ))}
-        </div>
-        
-        <h2 className="text-2xl md:text-3xl font-black font-display text-white mt-5 tracking-tight flex flex-col sm:flex-row items-center justify-center gap-3">
-          <span>Elige tus Números de la Suerte 🍀</span>
-          <button
-            type="button"
-            onClick={() => setIsTourActive(true)}
-            className="inline-flex items-center gap-1.5 bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 px-3.5 py-1.5 rounded-full text-xs font-bold text-purple-300 transition-all cursor-pointer shadow-sm hover:scale-105"
-          >
-            <HelpCircle size={13} className="text-pink-400" />
-            <span>Ver Guía Interactiva</span>
-          </button>
-        </h2>
-        
-        <p className="text-xs text-purple-200/80 mt-2.5 max-w-xl mx-auto leading-relaxed">
-          {isSalesClosed ? (
-            activeRaffle?.salesEnabled === false ? (
-              <span className="text-rose-400 font-bold">Las solicitudes y reservas de boletos han sido suspendidas temporalmente por el organizador. Por favor, consulte con su asesor asignado.</span>
-            ) : (
-              <span className="text-rose-400 font-bold">El tiempo preestablecido para la solicitud de boletos ha concluido. El organizador ha cerrado la recepción de reservas para preparar el sorteo.</span>
-            )
-          ) : (
-            <>
-              ¡Participa ahora en nuestro sorteo transparente! Selecciona tus números directamente de la cuadrícula o utiliza el <strong>Generador de la Suerte</strong> para una elección rápida. Reserva tu boleto hoy y asegura tu oportunidad.
-            </>
-          )}
-        </p>
-
-        {/* Vendedor asignado o selector si es público */}
-        {!window.location.search.includes('vendedor') && sellers.some(s => s.userId && s.userId.trim() !== '') && (
-          <div id="tour-step-advisor" className="mt-5 flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-2 text-xs bg-[#050212]/40 px-4 py-2.5 rounded-2xl border border-purple-950/40 inline-flex relative z-10 w-full sm:w-auto">
-            <span className="text-purple-300 font-medium text-center">Reserva con tu Asesor Favorito:</span>
-            <select 
-              value={selectedSellerForBuyerMode}
-              onChange={(e) => setSelectedSellerForBuyerMode(e.target.value)}
-              className="bg-[#0c0728] border border-purple-900/40 rounded-xl px-2.5 py-1 text-[11px] text-white focus:outline-none focus:ring-1 focus:ring-purple-500 shadow-inner font-sans font-semibold cursor-pointer w-full sm:w-auto text-center sm:text-left"
-            >
-              <option value="" className="bg-[#050212] text-white">Todos los Números</option>
-              {sellers.filter(s => s.userId && s.userId.trim() !== '').map((s, index) => (
-                <option key={`${s.id}-${index}`} value={s.id} className="bg-[#050212] text-white">{s.name} (Rango {s.assignedRangeStart}-{s.assignedRangeEnd})</option>
-              ))}
-            </select>
+              )
+            ))}
           </div>
-        )}
+
+          {/* Grand Prize Showcase Banner */}
+          {activeRaffle && (
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="w-full max-w-2xl mt-1 bg-gradient-to-r from-purple-900/50 via-slate-900/80 to-pink-900/50 border border-purple-500/40 hover:border-pink-500/50 p-5 rounded-2xl shadow-xl backdrop-blur-md relative overflow-hidden group"
+            >
+              <div className="absolute -top-12 -right-12 w-32 h-32 bg-amber-500/10 rounded-full blur-xl pointer-events-none"></div>
+              
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-3.5 text-left">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 p-0.5 shadow-lg shadow-amber-500/20 shrink-0">
+                    <div className="w-full h-full bg-[#0b0625] rounded-[14px] flex items-center justify-center text-amber-400">
+                      <Trophy className="w-7 h-7 text-amber-400 animate-bounce" style={{ animationDuration: '2s' }} />
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 flex items-center gap-1">
+                      <Star size={10} className="fill-amber-400" /> Gran Premio Oficial
+                    </span>
+                    <h3 className="text-lg sm:text-xl font-black font-display text-white tracking-tight leading-snug">
+                      {activeRaffle.prize || activeRaffle.name}
+                    </h3>
+                    <p className="text-xs text-purple-200/80 font-medium">
+                      Juego: <span className="text-white font-bold">{activeRaffle.name}</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="shrink-0 text-center sm:text-right bg-purple-950/60 border border-purple-500/30 px-4 py-2.5 rounded-xl">
+                  <span className="text-[10px] uppercase font-bold text-purple-300/80 block">Valor por Boleto</span>
+                  <span className="text-lg font-black font-mono text-emerald-400">
+                    {formatPrice(activeRaffle.ticketPrice || 10, config?.currency)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Progress Bar of Sold / Reserved Numbers */}
+              {(() => {
+                const total = activeRaffle.totalNumbers || 100;
+                const reservedOrSold = sales.filter(s => s.raffleId === activeRaffle.id).length;
+                const percentage = Math.min(100, Math.round((reservedOrSold / total) * 100));
+                return (
+                  <div className="mt-4 pt-3 border-t border-purple-500/20 space-y-1.5">
+                    <div className="flex justify-between text-[11px] font-semibold">
+                      <span className="text-purple-300">
+                        Progreso de Reservas: <strong className="text-pink-400">{reservedOrSold}</strong> de {total} boletos
+                      </span>
+                      <span className="text-emerald-400 font-mono font-bold">{percentage}% Ocupado</span>
+                    </div>
+                    <div className="w-full h-2.5 bg-[#050212] rounded-full overflow-hidden p-0.5 border border-purple-500/20">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${percentage}%` }}
+                        transition={{ duration: 1, ease: 'easeOut' }}
+                        className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-emerald-400 rounded-full shadow-sm"
+                      />
+                    </div>
+                  </div>
+                );
+              })()}
+            </motion.div>
+          )}
+
+          <h2 className="text-xl md:text-2xl font-black font-display text-white mt-2 tracking-tight flex flex-col sm:flex-row items-center justify-center gap-3">
+            <span>Elige tus Números de la Suerte 🍀</span>
+            <button
+              type="button"
+              onClick={() => setIsTourActive(true)}
+              className="inline-flex items-center gap-1.5 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold text-purple-200 transition-all cursor-pointer shadow-sm hover:scale-105"
+            >
+              <HelpCircle size={13} className="text-pink-400" />
+              <span>Ver Guía Interactiva</span>
+            </button>
+          </h2>
+
+          {/* Vendedor asignado o selector si es público */}
+          {!window.location.search.includes('vendedor') && sellers.some(s => s.userId && s.userId.trim() !== '') && (
+            <div id="tour-step-advisor" className="mt-2 flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-2 text-xs bg-[#050212]/60 px-4 py-2.5 rounded-2xl border border-purple-500/30 inline-flex relative z-10 w-full sm:w-auto shadow-inner">
+              <span className="text-purple-200 font-medium text-center">Reserva con tu Asesor Favorito:</span>
+              <select 
+                value={selectedSellerForBuyerMode}
+                onChange={(e) => setSelectedSellerForBuyerMode(e.target.value)}
+                className="bg-[#0c0728] border border-purple-500/40 rounded-xl px-3 py-1 text-[11px] text-white focus:outline-none focus:ring-1 focus:ring-pink-500 shadow-inner font-sans font-bold cursor-pointer w-full sm:w-auto text-center sm:text-left"
+              >
+                <option value="" className="bg-[#050212] text-white">Todos los Números ({activeRaffle?.totalNumbers || 100})</option>
+                {sellers.filter(s => s.userId && s.userId.trim() !== '').map((s, index) => (
+                  <option key={`${s.id}-${index}`} value={s.id} className="bg-[#050212] text-white">{s.name} (Rango {s.assignedRangeStart}-{s.assignedRangeEnd})</option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Core selection body */}
@@ -738,22 +745,25 @@ export default function BuyerPanel({
                 btnClass = "bg-slate-950/40 text-slate-500 border border-slate-900/50 border-dashed cursor-not-allowed opacity-40";
               } else if (sale) {
                 if (sale.status === 'PAID') {
-                  btnClass = "bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 cursor-pointer hover:bg-emerald-500/20 hover:scale-105 shadow-xs";
+                  btnClass = "bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 border-b-2 border-b-emerald-600/50 cursor-pointer hover:bg-emerald-500/20 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)]";
                 } else if (sale.status === 'RESERVED') {
-                  btnClass = "bg-amber-500/10 text-amber-300 border border-amber-500/20 cursor-pointer hover:bg-amber-500/20 hover:scale-105 shadow-xs";
+                  btnClass = "bg-amber-500/10 text-amber-300 border border-amber-500/30 border-b-2 border-b-amber-600/50 cursor-pointer hover:bg-amber-500/20 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)]";
                 } else {
-                  btnClass = "bg-slate-900/50 text-slate-400 border border-slate-800 cursor-pointer hover:scale-105";
+                  btnClass = "bg-slate-900/50 text-slate-400 border border-slate-800 cursor-pointer";
                 }
               } else if (isSelected) {
-                btnClass = "bg-purple-600 text-white font-black border border-purple-500 transform scale-110 shadow-lg shadow-purple-500/20 cursor-pointer animate-pulse";
+                btnClass = "bg-gradient-to-b from-purple-500 to-purple-700 text-white font-black border border-purple-400 border-b-2 border-b-purple-900 shadow-[0_4px_12px_rgba(168,85,247,0.4),inset_0_1px_0_0_rgba(255,255,255,0.4)] cursor-pointer animate-pulse";
               } else {
-                btnClass = "bg-[#0c0728] hover:bg-purple-950/40 text-purple-200 border border-purple-950 cursor-pointer hover:scale-105 hover:border-purple-500 shadow-sm";
+                btnClass = "bg-gradient-to-b from-[#120836] to-[#0a0522] hover:from-[#1b0c50] hover:to-[#0f0733] text-purple-200 border border-purple-500/30 border-b-2 border-b-purple-950/90 cursor-pointer hover:border-pink-500/60 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)]";
               }
 
               return (
-                <button
+                <motion.button
                   key={num}
                   type="button"
+                  whileHover={!isUnassigned ? { scale: 1.12, y: -2, zIndex: 10 } : {}}
+                  whileTap={!isUnassigned ? { scale: 0.92 } : {}}
+                  transition={{ type: "spring", stiffness: 400, damping: 20 }}
                   style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 40px' }}
                   onClick={() => {
                     if (isUnassigned) {
@@ -834,7 +844,7 @@ export default function BuyerPanel({
                   className={`p-2.5 rounded-xl text-xs font-mono font-bold transition-all text-center ${btnClass}`}
                 >
                   {num}
-                </button>
+                </motion.button>
               );
             })}
             {filteredTickets.length === 0 && (
@@ -1052,58 +1062,94 @@ export default function BuyerPanel({
             </p>
 
             {/* Ticket Mockup Layout */}
-            <div className="relative bg-gradient-to-br from-purple-700 via-fuchsia-600 to-pink-600 rounded-2xl p-4 text-white font-sans overflow-hidden border border-purple-500 shadow-xl min-h-[140px] flex flex-col justify-between">
-              {/* Circular cuts on the left and right sides - colored bg-[#0b0625] to merge with dark card background */}
-              <div className="absolute top-1/2 -left-3.5 w-7 h-7 bg-[#0b0625] rounded-full -translate-y-1/2 shadow-inner z-10"></div>
-              <div className="absolute top-1/2 -right-3.5 w-7 h-7 bg-[#0b0625] rounded-full -translate-y-1/2 shadow-inner z-10"></div>
-              {/* Dash boundary line separator */}
-              <div className="absolute top-0 bottom-0 left-[72%] w-0 border-r border-dashed border-white/20"></div>
+            <div className="relative bg-gradient-to-br from-[#140838] via-[#2a0c4f] to-[#120626] rounded-2xl p-4.5 text-white font-sans overflow-hidden border border-purple-500/60 shadow-2xl min-h-[165px] flex flex-col justify-between">
+              
+              {/* Background Non-Intrusive Guilloche Security Pattern Overlay (Z-INDEX 0) */}
+              <svg className="absolute inset-0 w-full h-full opacity-20 pointer-events-none z-0" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <pattern id="guillocheLive" width="50" height="50" patternUnits="userSpaceOnUse">
+                    <path d="M 0,25 Q 12.5,0 25,25 T 50,25" fill="none" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
+                    <path d="M 0,25 Q 12.5,50 25,25 T 50,25" fill="none" stroke="#ec4899" strokeWidth="0.8" opacity="0.4" />
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#guillocheLive)" />
+              </svg>
+              <div className="absolute top-0 left-1/4 w-36 h-36 bg-purple-500/20 rounded-full blur-2xl pointer-events-none z-0"></div>
+              <div className="absolute bottom-0 right-1/4 w-36 h-36 bg-pink-500/20 rounded-full blur-2xl pointer-events-none z-0"></div>
 
-              <div className="flex justify-between h-full relative z-20">
+              {/* Circular Notch Cuts on Left & Right */}
+              <div className="absolute top-1/2 -left-3.5 w-7 h-7 bg-[#0b0625] rounded-full -translate-y-1/2 border border-purple-500/40 z-10"></div>
+              <div className="absolute top-1/2 -right-3.5 w-7 h-7 bg-[#0b0625] rounded-full -translate-y-1/2 border border-purple-500/40 z-10"></div>
+              
+              {/* Stub Perforation Divider Line */}
+              <div className="absolute top-0 bottom-0 left-[70%] w-0 border-r border-dashed border-white/25 z-10"></div>
+
+              <div className="flex justify-between h-full relative z-20 gap-2">
                 {/* Left side ticket content */}
-                <div className="w-[68%] flex flex-col justify-between space-y-3 pr-2">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[8px] font-black uppercase bg-white/25 px-2 py-0.5 rounded tracking-widest text-white shadow-xs">
-                      BOLETO OFICIAL
-                    </span>
-                    <span className="text-[9px] text-purple-100 font-mono">
+                <div className="w-[67%] flex flex-col justify-between space-y-2 pr-1">
+                  <div className="flex items-center justify-between gap-1 flex-wrap">
+                    <div className="flex items-center gap-1.5">
+                      <img 
+                        src="/icon.svg" 
+                        alt="PromoBlitz Logo" 
+                        className="w-5 h-5 rounded-md shadow-sm border border-purple-400/40 object-contain shrink-0" 
+                      />
+                      <span className="text-[11px] font-black font-display tracking-tight text-white leading-none">
+                        Promo<span className="text-pink-400">Blitz</span>
+                      </span>
+                    </div>
+                    <span className="text-[8px] font-mono text-purple-200 bg-purple-950/80 px-2 py-0.5 rounded border border-purple-500/30">
                       REF: #{activeRaffle?.id ? activeRaffle.id.substring(0, 6).toUpperCase() : 'B0LETO'}
                     </span>
                   </div>
                   
                   <div>
-                    <h4 className="text-sm font-black tracking-tight truncate leading-tight">
+                    <h4 className="text-sm font-black tracking-tight truncate leading-tight text-white">
                       {activeRaffle?.name || 'Tesla Model 3 2026'}
                     </h4>
-                    <p className="text-[10px] text-purple-100 font-medium truncate mt-0.5">
-                      Premio: {activeRaffle?.prize || 'Por definir'}
+                    <p className="text-[10px] text-pink-300 font-medium truncate mt-0.5">
+                      Premio: <span className="text-white font-bold">{activeRaffle?.prize || 'Por definir'}</span>
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-[10px] border-t border-white/10 pt-2">
+                  <div className="grid grid-cols-2 gap-2 text-[10px] border-t border-white/15 pt-1.5">
                     <div>
-                      <span className="block text-purple-200 uppercase text-[7px] font-bold tracking-wider">Titular</span>
+                      <span className="block text-purple-300 uppercase text-[7px] font-bold tracking-wider">Titular</span>
                       <span className="font-bold block truncate text-white">
                         {buyerForm.buyerName || 'Sin Registrar'}
                       </span>
                     </div>
                     <div>
-                      <span className="block text-purple-200 uppercase text-[7px] font-bold tracking-wider">Ciudad</span>
+                      <span className="block text-purple-300 uppercase text-[7px] font-bold tracking-wider">Ciudad</span>
                       <span className="font-bold block truncate text-white">
                         {buyerForm.city || 'Madrid'}
                       </span>
                     </div>
                   </div>
+
+                  {/* Publicidad / Communicado Oficial en el Boleto */}
+                  <div className="bg-[#09031f]/90 border border-purple-500/30 px-2.5 py-1.5 rounded-xl flex items-center gap-2">
+                    <Megaphone size={12} className="text-pink-400 shrink-0 animate-pulse" />
+                    <div className="text-[9px] truncate">
+                      <span className="text-purple-300 font-extrabold uppercase text-[7px] block tracking-wider">Publicidad / Aviso Oficial</span>
+                      <span className="text-white font-bold truncate block">
+                        {(announcements || []).find(a => a.status === 'ACTIVE')?.title || 'PromoBlitz Campañas Oficiales'}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Right side ticket stub stub content */}
-                <div className="w-[25%] flex flex-col items-center justify-between text-center pl-3 py-1">
-                  <span className="text-[7px] text-purple-200 uppercase tracking-wider font-extrabold">NÚMERO</span>
-                  <div className="text-xl font-black font-mono tracking-tighter text-white bg-slate-900/35 px-2 py-1 rounded-lg">
+                {/* Right side ticket stub content */}
+                <div className="w-[29%] flex flex-col items-center justify-between text-center pl-2 py-0.5">
+                  <span className="text-[7px] text-purple-300 uppercase tracking-widest font-black">NÚMERO OFICIAL</span>
+                  <div className="text-xl font-black font-mono tracking-tighter text-white bg-slate-950/80 border border-purple-500/50 px-2.5 py-1 rounded-xl shadow-inner my-1">
                     {selectedTickets.length > 0 ? `#${selectedTickets[0]}` : '#???'}
                   </div>
-                  <span className="text-[9px] bg-white text-purple-800 font-extrabold px-2 py-0.5 rounded shadow-sm">
+                  <span className="text-[9px] bg-white text-purple-900 font-black px-2.5 py-0.5 rounded-lg shadow-sm">
                     {activeRaffle?.ticketPrice ? formatPrice(activeRaffle.ticketPrice, config?.currency) : formatPrice(10, config?.currency)}
+                  </span>
+                  <span className="text-[7px] font-bold text-emerald-300 bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 rounded-full mt-1">
+                    ✓ Certificado
                   </span>
                 </div>
               </div>
@@ -1204,7 +1250,7 @@ export default function BuyerPanel({
                 No se encontraron boletos registrados con la información ingresada. Verifica los datos o comunícate con tu colaborador autorizado para validar tu registro.
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {foundSales.map((sale, index) => {
                   const isPaid = sale.status === 'PAID' || sale.status === 'SOLD';
                   const assignedSeller = sellers.find(s => s.id === sale.sellerId) || 
@@ -1215,90 +1261,130 @@ export default function BuyerPanel({
 
                   // Generate whatsapp URL
                   let waUrl = '';
+                  const refCode = `REF-${sale.id.substring(0, 8).toUpperCase()}`;
+                  const priceFormatted = formatPrice(activeRaffle?.ticketPrice || 10, config?.currency);
+
                   if (isPaid) {
-                    const shareText = `¡Hola! Ya he verificado mi boleto oficial #${sale.ticketNumber} para el sorteo de "${activeRaffle?.name}" por el fabuloso premio "${activeRaffle?.prize}". ¡Deseame suerte! 🍀`;
+                    const shareText = `🎟️ *COMPROBANTE OFICIAL DE BOLETO* — PromoBlitz\n` +
+                      `────────────────────────\n` +
+                      `📍 *Sorteo:* ${activeRaffle?.name || 'Rifa Oficial'}\n` +
+                      `🎁 *Premio:* ${activeRaffle?.prize || 'Premio Especial'}\n` +
+                      `🔢 *Boleto Oficial:* #${sale.ticketNumber}\n` +
+                      `🆔 *Código Ref:* ${refCode}\n` +
+                      `👤 *Titular:* ${sale.buyerName}\n` +
+                      `📞 *Teléfono:* ${sale.phone}\n` +
+                      `🌆 *Ciudad:* ${sale.city || 'N/A'}\n` +
+                      `💰 *Precio:* ${priceFormatted}\n` +
+                      `🤝 *Asesor:* ${sellerName}\n` +
+                      `✅ *Estado:* CONFIRMADO Y REGISTRADO\n\n` +
+                      `¡Deseame mucha suerte! 🍀✨`;
                     waUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
                   } else {
-                    const paymentText = `Hola ${sellerName}, acabo de reservar el boleto #${sale.ticketNumber} para el sorteo "${activeRaffle?.name}". Quiero coordinar la confirmación de mi boleto a nombre de ${sale.buyerName}.`;
+                    const paymentText = `🎟️ *RESERVA DE BOLETO PENDIENTE* — PromoBlitz\n` +
+                      `Hola ${sellerName}, acabo de reservar el boleto #${sale.ticketNumber} (${refCode}) para el sorteo "${activeRaffle?.name}".\n\n` +
+                      `👤 *Titular:* ${sale.buyerName}\n` +
+                      `📞 *Teléfono:* ${sale.phone}\n` +
+                      `💰 *Monto a Pagar:* ${priceFormatted}\n\n` +
+                      `Quiero coordinar la confirmación y pago de mi boleto. Gracias.`;
                     waUrl = sellerPhone ? `https://wa.me/${normalizePhone(sellerPhone)}?text=${encodeURIComponent(paymentText)}` : '';
                   }
+
+                  const activeSponsor = (announcements || []).find(a => a.status === 'ACTIVE' && (a.placement === 'COMPRADOR_SIDEBAR' || a.placement === 'COMPRADOR_FOOTER' || a.placement === 'COMPRADOR_HERO' || a.placement === 'COMPRADOR_FLOAT' || a.placement === 'COMPRADOR_MODAL'));
+
+                  const ticketSvgMarkup = generateTicketSVG(
+                    sale.ticketNumber, 
+                    sale, 
+                    activeRaffle?.name || 'Rifa Oficial', 
+                    activeRaffle?.prize || 'Premio Especial', 
+                    config?.currency, 
+                    activeRaffle?.ticketPrice || 10,
+                    activeSponsor
+                  );
 
                   return (
                     <motion.div 
                       key={`${sale.id}-${index}`}
-                      whileHover={{ scale: 1.03, y: -4 }}
+                      whileHover={{ y: -3 }}
                       transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                      className={`relative bg-[#050212]/60 rounded-2xl p-3 sm:p-4 border flex flex-col justify-between gap-3 shadow-lg transition duration-300 hover:border-purple-500 cursor-pointer ${
-                        isPaid ? 'border-emerald-500/30 shadow-emerald-500/2' : 'border-amber-500/30 shadow-amber-500/2'
+                      className={`relative bg-[#050212]/90 rounded-2xl p-4 border flex flex-col justify-between gap-3 shadow-xl transition duration-300 hover:border-purple-500 ${
+                        isPaid ? 'border-emerald-500/40 shadow-emerald-500/5' : 'border-amber-500/40 shadow-amber-500/5'
                       }`}
                     >
-                      <div className="flex justify-between items-start gap-1">
-                        <div>
-                          <div className="flex flex-wrap items-center gap-1.5">
-                            <span className="text-[12px] sm:text-[14px] font-black font-mono text-white bg-slate-900/60 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg">
-                              #{sale.ticketNumber}
+                      {/* Top Header info */}
+                      <div className="flex justify-between items-center gap-2 border-b border-purple-950/60 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-black font-mono text-white bg-slate-950 px-2.5 py-1 rounded-lg border border-purple-500/30">
+                            #{sale.ticketNumber}
+                          </span>
+                          {isPaid ? (
+                            <span className="inline-flex items-center gap-1 text-[9px] bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold">
+                              <Check size={10} /> Confirmado
                             </span>
-                            {isPaid ? (
-                              <span className="inline-flex items-center gap-0.5 text-[8px] sm:text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-1.5 py-0.5 rounded-full font-bold">
-                                <Check size={10} /> Confirmado
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center gap-0.5 text-[8px] sm:text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-1.5 py-0.5 rounded-full font-bold">
-                                <Clock size={10} className="animate-pulse" /> Reserva
-                              </span>
-                            )}
-                          </div>
-                          <div className="mt-2 space-y-1 text-[11px] sm:text-xs">
-                            <p className="text-purple-200 font-semibold truncate max-w-[100px] sm:max-w-[200px]">
-                              Titular: <span className="text-white font-bold">{sale.buyerName}</span>
-                            </p>
-                            <p className="text-purple-300/80 text-[10px] sm:text-[11px] truncate max-w-[100px] sm:max-w-[200px]">
-                              Asesor: <span className="text-purple-200 font-medium">{sale.sellerName || sellerName}</span>
-                            </p>
-                            <p className="text-purple-400/80 text-[9px] sm:text-[10px] font-mono">
-                              {sale.date}
-                            </p>
-                          </div>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-[9px] bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full font-bold">
+                              <Clock size={10} className="animate-pulse" /> Reserva
+                            </span>
+                          )}
                         </div>
+                        <span className="text-[10px] font-bold text-white bg-purple-950/60 px-2 py-1 rounded border border-purple-900/40 font-mono">
+                          {formatPrice(activeRaffle?.ticketPrice || 10, config?.currency)}
+                        </span>
+                      </div>
 
-                        <div className="text-right shrink-0">
-                          <span className="text-[10px] sm:text-[11px] font-bold text-white bg-purple-950/40 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded border border-purple-900/30 font-mono">
-                            {formatPrice(activeRaffle?.ticketPrice || 10, config?.currency)}
+                      {/* Embed Graphic Vector Ticket SVG Preview */}
+                      <div 
+                        className="w-full aspect-[700/360] flex items-center justify-center rounded-2xl overflow-hidden border border-purple-500/40 shadow-xl bg-slate-950 cursor-pointer transition transform hover:scale-[1.01] hover:border-pink-500 group relative [&>div]:w-full [&>div]:h-full [&>div>svg]:w-full [&>div>svg]:h-full [&>div>svg]:object-contain"
+                        onClick={() => setPreviewTicketSale(sale)}
+                        title="Haz clic para ver el boleto ampliado"
+                      >
+                        <div className="w-full h-full flex items-center justify-center" dangerouslySetInnerHTML={{ __html: ticketSvgMarkup }} />
+                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none backdrop-blur-[1px]">
+                          <span className="bg-purple-950/90 text-white border border-purple-500/60 text-xs font-black px-3 py-1.5 rounded-xl shadow-xl flex items-center gap-1.5">
+                            <Eye size={14} className="text-pink-400" />
+                            Ampliar Comprobante Oficial
                           </span>
                         </div>
                       </div>
 
                       {/* Info & action buttons */}
-                      <div className="border-t border-purple-950/40 pt-2 sm:pt-3 flex flex-col gap-2">
+                      <div className="border-t border-purple-950/60 pt-2.5 flex flex-col gap-2">
                         {!isPaid && (
-                          <div className="w-full text-left text-[9px] sm:text-[10px] text-amber-400/90 leading-tight mb-1 font-sans">
-                            ⚠️ Expira en 3h. Paga hoy para asegurar tu número.
+                          <div className="w-full text-left text-[10px] text-amber-400/90 font-medium">
+                            ⚠️ Reserva pendiente. Paga hoy para confirmar tu número oficial.
                           </div>
                         )}
 
                         <div className="flex flex-wrap gap-1.5 justify-end w-full">
                           <button
                             type="button"
+                            onClick={() => setPreviewTicketSale(sale)}
+                            className="inline-flex items-center gap-1 bg-purple-950/60 hover:bg-purple-900/60 border border-purple-700/50 text-purple-200 text-[10px] font-bold px-2.5 py-1.5 rounded-xl transition cursor-pointer"
+                          >
+                            <Eye size={11} className="text-pink-400" />
+                            Ver Ampliado
+                          </button>
+                          <button
+                            type="button"
                             onClick={() => downloadTicket(sale, 'png')}
-                            className="inline-flex items-center gap-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white text-[9px] sm:text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition duration-200 shadow-sm cursor-pointer"
+                            className="inline-flex items-center gap-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-xl transition shadow-md shadow-purple-500/15 cursor-pointer"
                           >
                             <Download size={11} />
-                            Boleto Imagen (PNG)
+                            PNG
                           </button>
                           <button
                             type="button"
                             onClick={() => downloadTicket(sale, 'svg')}
-                            className="inline-flex items-center gap-1 bg-[#0c0728]/80 hover:bg-[#0c0728] border border-purple-950/60 hover:border-purple-500 text-purple-300 hover:text-white text-[9px] sm:text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition duration-200 cursor-pointer"
+                            className="inline-flex items-center gap-1 bg-[#0c0728] hover:bg-[#120a3a] border border-purple-800/60 text-purple-300 hover:text-white text-[10px] font-bold px-2.5 py-1.5 rounded-xl transition cursor-pointer"
                           >
                             <Download size={11} />
-                            Boleto SVG
+                            SVG
                           </button>
                           {isPaid ? (
                             <a
                               href={waUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 bg-slate-900/80 hover:bg-slate-900 text-purple-300 hover:text-white border border-purple-950/60 hover:border-purple-500 text-[9px] sm:text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition duration-200 cursor-pointer"
+                              className="inline-flex items-center gap-1 bg-slate-900/90 hover:bg-slate-900 text-purple-200 border border-purple-800/60 text-[10px] font-bold px-2.5 py-1.5 rounded-xl transition cursor-pointer"
                             >
                               <Share2 size={11} className="text-pink-400" />
                               Compartir
@@ -1309,14 +1395,12 @@ export default function BuyerPanel({
                                 href={waUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 bg-amber-500 hover:bg-amber-400 text-slate-950 text-[9px] sm:text-[11px] font-extrabold px-3 py-1.5 rounded-xl transition duration-200 shadow-md shadow-amber-500/10 cursor-pointer"
+                                className="inline-flex items-center gap-1 bg-amber-500 hover:bg-amber-400 text-slate-950 text-[10px] font-extrabold px-3 py-1.5 rounded-xl transition shadow-md shadow-amber-500/20 cursor-pointer"
                               >
                                 <Share2 size={11} />
                                 Pagar
                               </a>
-                            ) : (
-                              <span className="text-[9px] sm:text-[10px] text-purple-400 italic">Comunícate con tu asesor</span>
-                            )
+                            ) : null
                           )}
                         </div>
                       </div>
@@ -1650,6 +1734,83 @@ export default function BuyerPanel({
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
+      )}
+
+      {/* Preview Ticket Expanded Modal */}
+      {previewTicketSale && (
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 z-55">
+          <motion.div 
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-[#0b0625] border border-purple-500/50 rounded-2xl sm:rounded-3xl p-3 sm:p-5 max-w-3xl w-full shadow-2xl relative text-left flex flex-col justify-between max-h-[96vh]"
+          >
+            {/* Header */}
+            <div className="flex justify-between items-center pb-2.5 sm:pb-3 border-b border-purple-950 shrink-0">
+              <div className="pr-2">
+                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded-full border border-pink-500/20">
+                  Comprobante Oficial Verificado
+                </span>
+                <h3 className="text-xs sm:text-sm md:text-base font-black text-white mt-1 truncate">
+                  Boleto #{previewTicketSale.ticketNumber} — {activeRaffle?.name || 'Rifa Oficial'}
+                </h3>
+              </div>
+              <button 
+                onClick={() => setPreviewTicketSale(null)}
+                className="text-purple-300 hover:text-white p-1.5 sm:p-2 bg-purple-950/60 rounded-xl border border-purple-900/50 cursor-pointer shrink-0"
+              >
+                <X size={16} className="sm:w-5 sm:h-5" />
+              </button>
+            </div>
+
+            {/* SVG Ticket Viewport Container with strict aspect ratio */}
+            <div className="my-3 rounded-xl sm:rounded-2xl overflow-hidden border border-purple-500/40 shadow-2xl bg-slate-950 p-1 flex items-center justify-center w-full aspect-[700/360] shrink min-h-0 [&>svg]:w-full [&>svg]:h-auto [&>svg]:max-h-full [&>svg]:object-contain">
+              <div 
+                className="w-full h-full flex items-center justify-center [&>svg]:w-full [&>svg]:h-full [&>svg]:object-contain"
+                dangerouslySetInnerHTML={{ 
+                  __html: generateTicketSVG(
+                    previewTicketSale.ticketNumber,
+                    previewTicketSale,
+                    activeRaffle?.name || 'Rifa Oficial',
+                    activeRaffle?.prize || 'Premio Principal',
+                    config?.currency,
+                    activeRaffle?.ticketPrice || 10,
+                    (announcements || []).find(a => a.status === 'ACTIVE' && (a.placement === 'COMPRADOR_SIDEBAR' || a.placement === 'COMPRADOR_FOOTER' || a.placement === 'COMPRADOR_HERO' || a.placement === 'COMPRADOR_FLOAT' || a.placement === 'COMPRADOR_MODAL'))
+                  ) 
+                }} 
+              />
+            </div>
+
+            {/* Footer Actions */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 pt-2 border-t border-purple-950/60 shrink-0">
+              <p className="text-[11px] sm:text-xs text-purple-300 truncate w-full sm:w-auto text-center sm:text-left">
+                Titular: <span className="text-white font-bold">{previewTicketSale.buyerName}</span> ({previewTicketSale.phone})
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-2 w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => downloadTicket(previewTicketSale, 'png')}
+                  className="inline-flex items-center gap-1 sm:gap-1.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white text-[10px] sm:text-xs font-bold px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl shadow-md transition cursor-pointer"
+                >
+                  <Download size={13} /> Descargar PNG
+                </button>
+                <button
+                  type="button"
+                  onClick={() => downloadTicket(previewTicketSale, 'svg')}
+                  className="inline-flex items-center gap-1 sm:gap-1.5 bg-[#0c0728] hover:bg-[#120a3a] border border-purple-800/60 text-purple-200 text-[10px] sm:text-xs font-bold px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl transition cursor-pointer"
+                >
+                  <Download size={13} /> Descargar SVG
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPreviewTicketSale(null)}
+                  className="bg-purple-950/60 hover:bg-purple-900/60 border border-purple-900/50 text-purple-300 text-[10px] sm:text-xs font-bold px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl transition cursor-pointer"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </motion.div>
         </div>
       )}
     </motion.div>

@@ -390,165 +390,202 @@ export default function App() {
               className="space-y-6"
             >
               {/* Navegación Modular para el Organizador */}
-              {selectedOrgModule === null ? (
-                <div className="space-y-6">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
-                    {/* CARD 1: Estadísticas */}
-                    <motion.div
-                      whileHover={{ scale: 1.05, y: -4 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                      onClick={() => {
-                        setSelectedOrgModule('estadisticas');
-                        setOrganizerSection('estadisticas');
-                      }}
-                      className="bg-gradient-to-br from-purple-900 to-pink-900 border border-purple-500/40 hover:border-pink-500/60 p-4 rounded-3xl cursor-pointer shadow-lg shadow-purple-950/40 aspect-square flex flex-col items-center justify-center text-center group transition-all"
-                    >
-                      <div className="w-11 h-11 rounded-2xl bg-purple-500/20 flex items-center justify-center text-purple-200 border border-purple-400/30 mb-3 group-hover:bg-purple-500/30 group-hover:text-white transition-all">
-                        <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6" />
-                      </div>
-                      <h4 className="text-[11px] sm:text-xs md:text-sm font-black font-display text-white uppercase tracking-wider leading-tight">Estadísticas y KPIs</h4>
-                    </motion.div>
-
-                    {/* CARD 2: Ventas */}
-                    <motion.div
-                      whileHover={{ scale: 1.05, y: -4 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                      onClick={() => {
-                        setSelectedOrgModule('ventas');
-                        setOrganizerSection('ventas');
-                      }}
-                      className="bg-gradient-to-br from-purple-900 to-pink-900 border border-purple-500/40 hover:border-pink-500/60 p-4 rounded-3xl cursor-pointer shadow-lg shadow-purple-950/40 aspect-square flex flex-col items-center justify-center text-center group transition-all"
-                    >
-                      <div className="w-11 h-11 rounded-2xl bg-pink-500/20 flex items-center justify-center text-pink-200 border border-pink-400/30 mb-3 group-hover:bg-pink-500/30 group-hover:text-white transition-all">
-                        <Ticket className="w-5 h-5 sm:w-6 sm:h-6" />
-                      </div>
-                      <h4 className="text-[11px] sm:text-xs md:text-sm font-black font-display text-white uppercase tracking-wider leading-tight">Control de Reservas</h4>
-                    </motion.div>
-
-                    {/* CARD 3: Vendedores */}
-                    <motion.div
-                      whileHover={{ scale: 1.05, y: -4 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                      onClick={() => {
-                        setSelectedOrgModule('vendedores');
-                        setOrganizerSection('vendedores');
-                      }}
-                      className="bg-gradient-to-br from-purple-900 to-pink-900 border border-purple-500/40 hover:border-pink-500/60 p-4 rounded-3xl cursor-pointer shadow-lg shadow-purple-950/40 aspect-square flex flex-col items-center justify-center text-center group transition-all"
-                    >
-                      <div className="w-11 h-11 rounded-2xl bg-blue-500/20 flex items-center justify-center text-blue-200 border border-blue-400/30 mb-3 group-hover:bg-blue-500/30 group-hover:text-white transition-all">
-                        <Users className="w-5 h-5 sm:w-6 sm:h-6" />
-                      </div>
-                      <h4 className="text-[11px] sm:text-xs md:text-sm font-black font-display text-white uppercase tracking-wider leading-tight">Gestión de Colaboradores</h4>
-                    </motion.div>
-
-                    {/* CARD 4: Sorteos */}
-                    <motion.div
-                      whileHover={{ scale: 1.05, y: -4 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                      onClick={() => {
-                        setSelectedOrgModule('sorteos');
-                        setOrganizerSection('sorteos');
-                      }}
-                      className="bg-gradient-to-br from-purple-900 to-pink-900 border border-purple-500/40 hover:border-pink-500/60 p-4 rounded-3xl cursor-pointer shadow-lg shadow-purple-950/40 aspect-square flex flex-col items-center justify-center text-center group transition-all"
-                    >
-                      <div className="w-11 h-11 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-200 border border-amber-400/30 mb-3 group-hover:bg-amber-500/30 group-hover:text-white transition-all">
-                        <Award className="w-5 h-5 sm:w-6 sm:h-6" />
-                      </div>
-                      <h4 className="text-[11px] sm:text-xs md:text-sm font-black font-display text-white uppercase tracking-wider leading-tight">Tómbola & Sorteos</h4>
-                    </motion.div>
-
-                    {/* CARD 5: Comisiones */}
-                    <motion.div
-                      whileHover={{ scale: 1.05, y: -4 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                      onClick={() => {
-                        setSelectedOrgModule('comisiones');
-                        setOrganizerSection('comisiones');
-                      }}
-                      className="bg-gradient-to-br from-purple-900 to-pink-900 border border-purple-500/40 hover:border-pink-500/60 p-4 rounded-3xl cursor-pointer shadow-lg shadow-purple-950/40 aspect-square flex flex-col items-center justify-center text-center group transition-all"
-                    >
-                      <div className="w-11 h-11 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-200 border border-emerald-400/30 mb-3 group-hover:bg-emerald-500/30 group-hover:text-white transition-all">
-                        <FileText className="w-5 h-5 sm:w-6 sm:h-6" />
-                      </div>
-                      <h4 className="text-[11px] sm:text-xs md:text-sm font-black font-display text-white uppercase tracking-wider leading-tight">Reporte de Comisiones</h4>
-                    </motion.div>
-
-                    {/* CARD 6: Publicidad */}
-                    <motion.div
-                      whileHover={{ scale: 1.05, y: -4 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                      onClick={() => {
-                        setSelectedOrgModule('publicidad');
-                        setOrganizerSection('publicidad');
-                      }}
-                      className="bg-gradient-to-br from-purple-900 to-pink-900 border border-purple-500/40 hover:border-pink-500/60 p-4 rounded-3xl cursor-pointer shadow-lg shadow-purple-950/40 aspect-square flex flex-col items-center justify-center text-center group transition-all"
-                    >
-                      <div className="w-11 h-11 rounded-2xl bg-violet-500/20 flex items-center justify-center text-violet-200 border border-violet-400/30 mb-3 group-hover:bg-violet-500/30 group-hover:text-white transition-all">
-                        <Megaphone className="w-5 h-5 sm:w-6 sm:h-6" />
-                      </div>
-                      <h4 className="text-[11px] sm:text-xs md:text-sm font-black font-display text-white uppercase tracking-wider leading-tight">Comunicados Oficiales</h4>
-                    </motion.div>
-
-                    {/* CARD 7: Configuración */}
-                    <motion.div
-                      whileHover={{ scale: 1.05, y: -4 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                      onClick={() => {
-                        setSelectedOrgModule('configuracion');
-                        setOrganizerSection('configuracion');
-                      }}
-                      className="bg-gradient-to-br from-purple-900 to-pink-900 border border-purple-500/40 hover:border-pink-500/60 p-4 rounded-3xl cursor-pointer shadow-lg shadow-purple-950/40 aspect-square flex flex-col items-center justify-center text-center group transition-all"
-                    >
-                      <div className="w-11 h-11 rounded-2xl bg-slate-500/20 flex items-center justify-center text-slate-200 border border-slate-400/30 mb-3 group-hover:bg-slate-500/30 group-hover:text-white transition-all">
-                        <Settings className="w-5 h-5 sm:w-6 sm:h-6" />
-                      </div>
-                      <h4 className="text-[11px] sm:text-xs md:text-sm font-black font-display text-white uppercase tracking-wider leading-tight">Configuración General</h4>
-                    </motion.div>
-
-                    {/* CARD 8: Super Admin */}
-                    {currentUser.isSuperAdmin && (
+              <AnimatePresence mode="wait">
+                {selectedOrgModule === null ? (
+                  <motion.div 
+                    key="org-menu-grid"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.08, filter: 'blur(8px)' }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="space-y-6"
+                  >
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                      {/* CARD 1: Estadísticas */}
                       <motion.div
-                        whileHover={{ scale: 1.05, y: -4 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                        whileHover={{ scale: 1.07, y: -6 }}
+                        whileTap={{ scale: 0.94 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 20 }}
                         onClick={() => {
-                          setSelectedOrgModule('superadmin');
-                          setOrganizerSection('superadmin');
+                          setSelectedOrgModule('estadisticas');
+                          setOrganizerSection('estadisticas');
                         }}
-                        className="bg-gradient-to-br from-pink-900 to-red-950 border border-pink-500/40 hover:border-pink-500/60 p-4 rounded-3xl cursor-pointer shadow-lg shadow-pink-950/40 aspect-square flex flex-col items-center justify-center text-center group transition-all"
+                        className="relative overflow-hidden bg-gradient-to-br from-[#120a36] via-[#1a0c47] to-[#21093b] border border-purple-500/30 border-b-4 border-b-purple-900/90 hover:border-pink-500/80 p-4 rounded-3xl cursor-pointer shadow-[0_14px_30px_-6px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(217,70,239,0.35),inset_0_1px_0_0_rgba(255,255,255,0.3)] aspect-square flex flex-col items-center justify-center text-center group transition-all duration-300 backdrop-blur-md"
                       >
-                        <div className="w-11 h-11 rounded-2xl bg-pink-500/20 flex items-center justify-center text-pink-200 border border-pink-400/30 mb-3 group-hover:bg-pink-500/30 group-hover:text-white transition-all">
-                          <ShieldAlert className="w-5 h-5 sm:w-6 sm:h-6 text-pink-300 animate-pulse" />
+                        <div className="absolute -top-10 -right-10 w-24 h-24 bg-purple-500/10 rounded-full blur-xl group-hover:bg-pink-500/20 transition-all"></div>
+                        <div className="w-12 h-12 rounded-2xl bg-purple-500/20 group-hover:bg-purple-500/40 flex items-center justify-center text-purple-200 group-hover:text-white border border-purple-400/30 mb-3 transition-all duration-300 group-hover:scale-110 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)]">
+                          <TrendingUp className="w-6 h-6" />
                         </div>
-                        <h4 className="text-[11px] sm:text-xs md:text-sm font-black font-display text-white uppercase tracking-wider leading-tight">Super Admin</h4>
+                        <h4 className="text-[11px] sm:text-xs font-black font-display text-white uppercase tracking-wider leading-tight">KPIs y Estadísticas</h4>
                       </motion.div>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {/* Cabecera limpia con botón para volver */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-purple-950/30">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedOrgModule(null)}
-                      className="w-fit bg-[#120935] hover:bg-[#1c0f4d] text-purple-300 border border-purple-500/30 px-5 py-2.5 rounded-2xl text-xs font-black transition flex items-center gap-2 cursor-pointer shadow-md active:translate-y-[2px]"
-                    >
-                      <ArrowLeft size={14} className="text-purple-400" /> Volver al Menú Principal
-                    </button>
-                    <div className="sm:text-right">
-                      <h2 className="text-lg font-black text-white font-display uppercase tracking-wide">
-                        {selectedOrgModule === 'estadisticas' && 'Módulo de Estadísticas y KPIs'}
-                        {selectedOrgModule === 'ventas' && 'Módulo de Auditoría de Solicitudes'}
-                        {selectedOrgModule === 'vendedores' && 'Módulo de Gestión de Colaboradores'}
-                        {selectedOrgModule === 'sorteos' && 'Módulo de Tómbola & Sorteos'}
-                        {selectedOrgModule === 'comisiones' && 'Módulo de Reporte de Comisiones'}
-                        {selectedOrgModule === 'publicidad' && 'Módulo de Comunicados Oficiales'}
-                        {selectedOrgModule === 'configuracion' && 'Módulo de Configuración General'}
-                        {selectedOrgModule === 'superadmin' && 'Panel de Super Administrador'}
-                      </h2>
-                      <p className="text-[10px] text-purple-400 font-bold uppercase tracking-wider">Gestión y control del sistema</p>
+
+                      {/* CARD 2: Ventas */}
+                      <motion.div
+                        whileHover={{ scale: 1.07, y: -6 }}
+                        whileTap={{ scale: 0.94 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                        onClick={() => {
+                          setSelectedOrgModule('ventas');
+                          setOrganizerSection('ventas');
+                        }}
+                        className="relative overflow-hidden bg-gradient-to-br from-[#120a36] via-[#1a0c47] to-[#21093b] border border-purple-500/30 border-b-4 border-b-purple-900/90 hover:border-pink-500/80 p-4 rounded-3xl cursor-pointer shadow-[0_14px_30px_-6px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(217,70,239,0.35),inset_0_1px_0_0_rgba(255,255,255,0.3)] aspect-square flex flex-col items-center justify-center text-center group transition-all duration-300 backdrop-blur-md"
+                      >
+                        <div className="absolute -top-10 -right-10 w-24 h-24 bg-pink-500/10 rounded-full blur-xl group-hover:bg-pink-500/20 transition-all"></div>
+                        <div className="w-12 h-12 rounded-2xl bg-pink-500/20 group-hover:bg-pink-500/40 flex items-center justify-center text-pink-200 group-hover:text-white border border-pink-400/30 mb-3 transition-all duration-300 group-hover:scale-110 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)]">
+                          <Ticket className="w-6 h-6" />
+                        </div>
+                        <h4 className="text-[11px] sm:text-xs font-black font-display text-white uppercase tracking-wider leading-tight">Aprobación y Venta de Boletos</h4>
+                      </motion.div>
+
+                      {/* CARD 3: Vendedores */}
+                      <motion.div
+                        whileHover={{ scale: 1.07, y: -6 }}
+                        whileTap={{ scale: 0.94 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                        onClick={() => {
+                          setSelectedOrgModule('vendedores');
+                          setOrganizerSection('vendedores');
+                        }}
+                        className="relative overflow-hidden bg-gradient-to-br from-[#120a36] via-[#1a0c47] to-[#21093b] border border-purple-500/30 border-b-4 border-b-purple-900/90 hover:border-blue-500/80 p-4 rounded-3xl cursor-pointer shadow-[0_14px_30px_-6px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(59,130,246,0.35),inset_0_1px_0_0_rgba(255,255,255,0.3)] aspect-square flex flex-col items-center justify-center text-center group transition-all duration-300 backdrop-blur-md"
+                      >
+                        <div className="absolute -top-10 -right-10 w-24 h-24 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/20 transition-all"></div>
+                        <div className="w-12 h-12 rounded-2xl bg-blue-500/20 group-hover:bg-blue-500/40 flex items-center justify-center text-blue-200 group-hover:text-white border border-blue-400/30 mb-3 transition-all duration-300 group-hover:scale-110 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)]">
+                          <Users className="w-6 h-6" />
+                        </div>
+                        <h4 className="text-[11px] sm:text-xs font-black font-display text-white uppercase tracking-wider leading-tight">Gestión de Colaboradores</h4>
+                      </motion.div>
+
+                      {/* CARD 4: Sorteos */}
+                      <motion.div
+                        whileHover={{ scale: 1.07, y: -6 }}
+                        whileTap={{ scale: 0.94 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                        onClick={() => {
+                          setSelectedOrgModule('sorteos');
+                          setOrganizerSection('sorteos');
+                        }}
+                        className="relative overflow-hidden bg-gradient-to-br from-[#120a36] via-[#1a0c47] to-[#21093b] border border-purple-500/30 border-b-4 border-b-purple-900/90 hover:border-amber-500/80 p-4 rounded-3xl cursor-pointer shadow-[0_14px_30px_-6px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(245,158,11,0.35),inset_0_1px_0_0_rgba(255,255,255,0.3)] aspect-square flex flex-col items-center justify-center text-center group transition-all duration-300 backdrop-blur-md"
+                      >
+                        <div className="absolute -top-10 -right-10 w-24 h-24 bg-amber-500/10 rounded-full blur-xl group-hover:bg-amber-500/20 transition-all"></div>
+                        <div className="w-12 h-12 rounded-2xl bg-amber-500/20 group-hover:bg-amber-500/40 flex items-center justify-center text-amber-200 group-hover:text-white border border-amber-400/30 mb-3 transition-all duration-300 group-hover:scale-110 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)]">
+                          <Award className="w-6 h-6" />
+                        </div>
+                        <h4 className="text-[11px] sm:text-xs font-black font-display text-white uppercase tracking-wider leading-tight">Sorteos y Ganadores</h4>
+                      </motion.div>
+
+                      {/* CARD 5: Comisiones */}
+                      <motion.div
+                        whileHover={{ scale: 1.07, y: -6 }}
+                        whileTap={{ scale: 0.94 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                        onClick={() => {
+                          setSelectedOrgModule('comisiones');
+                          setOrganizerSection('comisiones');
+                        }}
+                        className="relative overflow-hidden bg-gradient-to-br from-[#120a36] via-[#1a0c47] to-[#21093b] border border-purple-500/30 border-b-4 border-b-purple-900/90 hover:border-emerald-500/80 p-4 rounded-3xl cursor-pointer shadow-[0_14px_30px_-6px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(16,185,129,0.35),inset_0_1px_0_0_rgba(255,255,255,0.3)] aspect-square flex flex-col items-center justify-center text-center group transition-all duration-300 backdrop-blur-md"
+                      >
+                        <div className="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all"></div>
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 group-hover:bg-emerald-500/40 flex items-center justify-center text-emerald-200 group-hover:text-white border border-emerald-400/30 mb-3 transition-all duration-300 group-hover:scale-110 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)]">
+                          <FileText className="w-6 h-6" />
+                        </div>
+                        <h4 className="text-[11px] sm:text-xs font-black font-display text-white uppercase tracking-wider leading-tight">Reporte de Comisiones</h4>
+                      </motion.div>
+
+                      {/* CARD 6: Publicidad */}
+                      <motion.div
+                        whileHover={{ scale: 1.07, y: -6 }}
+                        whileTap={{ scale: 0.94 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                        onClick={() => {
+                          setSelectedOrgModule('publicidad');
+                          setOrganizerSection('publicidad');
+                        }}
+                        className="relative overflow-hidden bg-gradient-to-br from-[#120a36] via-[#1a0c47] to-[#21093b] border border-purple-500/30 border-b-4 border-b-purple-900/90 hover:border-violet-500/80 p-4 rounded-3xl cursor-pointer shadow-[0_14px_30px_-6px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(139,92,246,0.35),inset_0_1px_0_0_rgba(255,255,255,0.3)] aspect-square flex flex-col items-center justify-center text-center group transition-all duration-300 backdrop-blur-md"
+                      >
+                        <div className="absolute -top-10 -right-10 w-24 h-24 bg-violet-500/10 rounded-full blur-xl group-hover:bg-violet-500/20 transition-all"></div>
+                        <div className="w-12 h-12 rounded-2xl bg-violet-500/20 group-hover:bg-violet-500/40 flex items-center justify-center text-violet-200 group-hover:text-white border border-violet-400/30 mb-3 transition-all duration-300 group-hover:scale-110 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)]">
+                          <Megaphone className="w-6 h-6" />
+                        </div>
+                        <h4 className="text-[11px] sm:text-xs font-black font-display text-white uppercase tracking-wider leading-tight">Avisos y Comunicados</h4>
+                      </motion.div>
+
+                      {/* CARD 7: Configuración */}
+                      <motion.div
+                        whileHover={{ scale: 1.07, y: -6 }}
+                        whileTap={{ scale: 0.94 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                        onClick={() => {
+                          setSelectedOrgModule('configuracion');
+                          setOrganizerSection('configuracion');
+                        }}
+                        className="relative overflow-hidden bg-gradient-to-br from-[#120a36] via-[#1a0c47] to-[#21093b] border border-purple-500/30 border-b-4 border-b-purple-900/90 hover:border-slate-400/80 p-4 rounded-3xl cursor-pointer shadow-[0_14px_30px_-6px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(148,163,184,0.35),inset_0_1px_0_0_rgba(255,255,255,0.3)] aspect-square flex flex-col items-center justify-center text-center group transition-all duration-300 backdrop-blur-md"
+                      >
+                        <div className="absolute -top-10 -right-10 w-24 h-24 bg-slate-500/10 rounded-full blur-xl group-hover:bg-slate-500/20 transition-all"></div>
+                        <div className="w-12 h-12 rounded-2xl bg-slate-500/20 group-hover:bg-slate-500/40 flex items-center justify-center text-slate-200 group-hover:text-white border border-slate-400/30 mb-3 transition-all duration-300 group-hover:scale-110 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)]">
+                          <Settings className="w-6 h-6" />
+                        </div>
+                        <h4 className="text-[11px] sm:text-xs font-black font-display text-white uppercase tracking-wider leading-tight">Configuración y Precios</h4>
+                      </motion.div>
+
+                      {/* CARD 8: Super Admin */}
+                      {currentUser.isSuperAdmin && (
+                        <motion.div
+                          whileHover={{ scale: 1.07, y: -6 }}
+                          whileTap={{ scale: 0.94 }}
+                          transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                          onClick={() => {
+                            setSelectedOrgModule('superadmin');
+                            setOrganizerSection('superadmin');
+                          }}
+                          className="relative overflow-hidden bg-gradient-to-br from-[#2b081e] via-[#3a0928] to-[#1e0314] border border-pink-500/40 border-b-4 border-b-pink-900/90 hover:border-pink-500/90 p-4 rounded-3xl cursor-pointer shadow-[0_14px_30px_-6px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(236,72,153,0.45),inset_0_1px_0_0_rgba(255,255,255,0.3)] aspect-square flex flex-col items-center justify-center text-center group transition-all duration-300 backdrop-blur-md"
+                        >
+                          <div className="absolute -top-10 -right-10 w-24 h-24 bg-pink-500/15 rounded-full blur-xl group-hover:bg-pink-500/30 transition-all"></div>
+                          <div className="w-12 h-12 rounded-2xl bg-pink-500/20 group-hover:bg-pink-500/40 flex items-center justify-center text-pink-200 group-hover:text-white border border-pink-400/30 mb-3 transition-all duration-300 group-hover:scale-110 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)]">
+                            <ShieldAlert className="w-6 h-6 text-pink-300 animate-pulse" />
+                          </div>
+                          <h4 className="text-[11px] sm:text-xs font-black font-display text-white uppercase tracking-wider leading-tight">Control de Propietarios</h4>
+                        </motion.div>
+                      )}
                     </div>
-                  </div>
+                  </motion.div>
+                ) : (
+                  <motion.div 
+                    key={`org-module-${selectedOrgModule}`}
+                    initial={{ opacity: 0, scale: 0.92, y: 18, filter: 'blur(6px)' }}
+                    animate={{ opacity: 1, scale: 1, y: 0, filter: 'blur(0px)' }}
+                    exit={{ opacity: 0, scale: 0.94, filter: 'blur(6px)' }}
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    className="space-y-6"
+                  >
+                    {/* Cabecera limpia con indicador de módulo activo y botón para volver */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-purple-900/40 bg-gradient-to-r from-purple-950/30 via-transparent to-transparent p-4 rounded-2xl border border-purple-500/20 shadow-md">
+                      <motion.button
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.93 }}
+                        type="button"
+                        onClick={() => setSelectedOrgModule(null)}
+                        className="w-fit bg-[#120935] hover:bg-[#1c0f4d] text-purple-300 border border-purple-500/30 border-b-2 border-b-purple-900/90 px-5 py-2.5 rounded-2xl text-xs font-black transition flex items-center gap-2 cursor-pointer shadow-[0_4px_10px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.15)]"
+                      >
+                        <ArrowLeft size={14} className="text-purple-400" /> Volver al Menú Principal
+                      </motion.button>
+                      <div className="sm:text-right space-y-1">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-purple-500/20 border border-purple-400/30 text-[10px] font-black text-purple-300 uppercase tracking-widest shadow-xs">
+                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                          Módulo Activo
+                        </div>
+                        <h2 className="text-xl sm:text-2xl font-black text-white font-display uppercase tracking-wide flex items-center justify-end gap-2">
+                          {selectedOrgModule === 'estadisticas' && 'KPIs y Estadísticas'}
+                          {selectedOrgModule === 'ventas' && 'Aprobación y Venta de Boletos'}
+                          {selectedOrgModule === 'vendedores' && 'Gestión de Colaboradores'}
+                          {selectedOrgModule === 'sorteos' && 'Sorteos y Ganadores'}
+                          {selectedOrgModule === 'comisiones' && 'Reporte de Comisiones'}
+                          {selectedOrgModule === 'publicidad' && 'Avisos y Comunicados'}
+                          {selectedOrgModule === 'configuracion' && 'Configuración y Precios'}
+                          {selectedOrgModule === 'superadmin' && 'Control de Propietarios'}
+                        </h2>
+                        <p className="text-[11px] text-purple-300 font-bold uppercase tracking-wider">Gestión, auditoría y administración del sistema</p>
+                      </div>
+                    </div>
 
                   {/* SECCIÓN EXTRA: REPORTE DE COMISIONES (Segmentación por Colaborador) */}
                   {selectedOrgModule === 'comisiones' && (
@@ -681,8 +718,9 @@ export default function App() {
                       <SuperAdminPanel currentUser={currentUser} />
                     </motion.div>
                   )}
-                </div>
+                </motion.div>
               )}
+            </AnimatePresence>
 
             </motion.div>
           )}

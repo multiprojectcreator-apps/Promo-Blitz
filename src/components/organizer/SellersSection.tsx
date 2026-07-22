@@ -224,7 +224,7 @@ export default function SellersSection({
                       <Key size={18} />
                     </span>
                     <div>
-                      <h3 className="text-sm font-black font-display text-white">Nueva Licencia de Vendedor</h3>
+                      <h3 className="text-sm font-black font-display text-white">Nueva Licencia de Colaborador</h3>
                       <p className="text-[10px] text-slate-400">Generación y reservación de rango único</p>
                     </div>
                   </div>
@@ -249,7 +249,7 @@ export default function SellersSection({
                   
                   <div className="p-3 bg-purple-950/20 border border-purple-500/15 rounded-xl text-[11px] text-slate-300 leading-relaxed space-y-1">
                     <p className="font-bold flex items-center gap-1 text-purple-300">🛡️ Licencia Libre (Software License):</p>
-                    <p>Genera un cupo desvinculado con un rango exclusivo de boletos. El sistema producirá un <strong>Código de Vinculación Único</strong> que le podrás pasar a cualquier persona para que se registre como vendedor de manera autónoma, heredando este rango automáticamente.</p>
+                    <p>Genera un cupo desvinculado con un rango exclusivo de boletos. El sistema producirá un <strong>Código de Vinculación Único</strong> que le podrás pasar a cualquier persona para que se registre como colaborador de manera autónoma, heredando este rango automáticamente.</p>
                   </div>
 
                   <div>
@@ -367,9 +367,9 @@ export default function SellersSection({
         </AnimatePresence>
 
         <div className="space-y-4">
-          <p className="text-xs text-slate-400">Supervise y gestione las licencias y los vendedores de la rifa. Las licencias libres pueden ser vinculadas en cualquier momento por vendedores usando el código único.</p>
+          <p className="text-xs text-slate-400">Supervise y gestione las licencias y los colaboradores de la rifa. Las licencias libres pueden ser vinculadas en cualquier momento por colaboradores usando el código único.</p>
             
-          <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {sellers.map((s, index) => {
               const isLinked = !!s.userId;
               const sUsername = s.username || 'Por registrar';
@@ -438,19 +438,19 @@ export default function SellersSection({
                     <div className="flex items-center gap-3 bg-slate-900 p-2.5 rounded-xl border border-slate-800">
                       <img 
                         src={sQRUrl} 
-                        alt="Vendedor QR" 
+                        alt="Colaborador QR" 
                         referrerPolicy="no-referrer"
                         className="w-12 h-12 rounded border border-slate-800 shrink-0" 
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="text-[9px] text-slate-500 uppercase font-bold tracking-wider">Enlace del Vendedor</p>
+                        <p className="text-[9px] text-slate-500 uppercase font-bold tracking-wider">Enlace del Colaborador</p>
                         <p className="text-xs font-semibold text-slate-200 truncate font-mono">{sLink}</p>
                         <div className="flex gap-2 mt-1">
                           <button 
                             type="button"
                             onClick={() => {
                               navigator.clipboard.writeText(sLink);
-                              alert("¡Enlace del vendedor copiado al portapapeles!");
+                              alert("¡Enlace del colaborador copiado al portapapeles!");
                             }}
                             className="text-[10px] text-pink-400 hover:underline font-semibold flex items-center gap-0.5 cursor-pointer"
                           >
@@ -470,7 +470,7 @@ export default function SellersSection({
                     </div>
                   ) : (
                     <div className="text-[10.5px] text-purple-300 leading-normal bg-purple-950/15 p-2.5 rounded-xl border border-purple-900/20">
-                      💡 Comparte el <strong>Código de Enlace</strong> anterior con la persona que vaya a ser tu vendedor para que se registre por sí misma.
+                      💡 Comparte el <strong>Código de Enlace</strong> anterior con la persona que vaya a ser tu colaborador para que se registre por sí misma.
                     </div>
                   )}
                 </motion.div>

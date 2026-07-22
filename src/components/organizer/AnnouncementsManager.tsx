@@ -342,7 +342,7 @@ export default function AnnouncementsManager({
     setSuccessMsg('');
 
     if (form.targetType === 'SPECIFIC' && !form.targetSellerId) {
-      setError('Debes seleccionar un vendedor específico.');
+      setError('Debes seleccionar un colaborador específico.');
       return;
     }
 
@@ -494,7 +494,7 @@ export default function AnnouncementsManager({
   const getTargetLabel = (ann: Announcement) => {
     if (ann.targetType === 'ALL') return '📢 Todos';
     const s = sellers.find(seller => seller.id === ann.targetSellerId);
-    return `👤 Vendedor: ${s ? s.name : 'No asignado'}`;
+    return `👤 Colaborador: ${s ? s.name : 'No asignado'}`;
   };
 
   const getPlacementLabel = (p: string) => {
@@ -504,10 +504,10 @@ export default function AnnouncementsManager({
       case 'COMPRADOR_FOOTER': return '🍀 Comprador - Pie de Página (Footer)';
       case 'COMPRADOR_MODAL': return '🍀 Comprador - Alerta Emergente al entrar (Modal)';
       case 'COMPRADOR_FLOAT': return '🍀 Comprador - Tarjeta Flotante Esquina (Floating Widget)';
-      case 'VENDEDOR_PANEL': return '📊 Vendedor - Panel / Dashboard';
+      case 'VENDEDOR_PANEL': return '📊 Colaborador - Panel / Dashboard';
       case 'MODAL_ALERTA': return '🚨 Modal Alerta Emergente';
       case 'LOGIN': return '🚪 Al iniciar sesión';
-      case 'DASHBOARD': return '📊 Panel del vendedor (Legacy)';
+      case 'DASHBOARD': return '📊 Panel del colaborador (Legacy)';
       case 'BOTH': return '🔄 Ambos (Legacy)';
       default: return p;
     }
@@ -1092,7 +1092,7 @@ export default function AnnouncementsManager({
                       /* Seller Dashboard Card Mockup */
                       <div className="border border-slate-800 rounded-3xl overflow-hidden bg-slate-950 shadow-md">
                         <div className="p-2 bg-slate-900 text-[9px] text-slate-400 font-mono text-center border-b border-slate-850">
-                          VISTA TARJETA DE DASHBOARD (PANEL VENDEDOR)
+                          VISTA TARJETA DE DASHBOARD (PANEL COLABORADOR)
                         </div>
 
                         <div className="p-4 border-l-4 border-l-pink-500 flex gap-4 items-start">
@@ -1131,7 +1131,7 @@ export default function AnnouncementsManager({
                         <span className="font-bold text-slate-300">{getPlacementLabel(selectedAnn.placement)}</span>
                       </div>
                       <div>
-                        <span className="block text-[8px] text-slate-500 font-bold uppercase tracking-wider">Segmento Vendedores</span>
+                        <span className="block text-[8px] text-slate-500 font-bold uppercase tracking-wider">Segmento Colaboradores</span>
                         <span className="font-bold text-slate-300">{getTargetLabel(selectedAnn)}</span>
                       </div>
                       <div className="col-span-2 border-t border-slate-850 pt-2 mt-1 flex justify-between">
@@ -1405,9 +1405,9 @@ export default function AnnouncementsManager({
                         </>
                       ) : (
                         <>
-                          <option value="VENDEDOR_PANEL" className="bg-slate-900 text-white">📊 Vendedor - Panel / Dashboard</option>
-                          <option value="MODAL_ALERTA" className="bg-slate-900 text-white">🚨 Modal Alerta Emergente (Asesores)</option>
-                          <option value="DASHBOARD" className="bg-slate-900 text-white">📊 Panel del vendedor (Legacy)</option>
+                          <option value="VENDEDOR_PANEL" className="bg-slate-900 text-white">📊 Colaborador - Panel / Dashboard</option>
+                          <option value="MODAL_ALERTA" className="bg-slate-900 text-white">🚨 Modal Alerta Emergente (Colaboradores)</option>
+                          <option value="DASHBOARD" className="bg-slate-900 text-white">📊 Panel del colaborador (Legacy)</option>
                           <option value="BOTH" className="bg-slate-900 text-white">🔄 Ambos (Legacy)</option>
                         </>
                       )}
@@ -1573,7 +1573,7 @@ export default function AnnouncementsManager({
 
                     {form.targetType === 'SPECIFIC' && (
                       <div className="col-span-2">
-                        <label className="block text-[11px] font-semibold text-slate-400 mb-1">Vendedor Destino *</label>
+                        <label className="block text-[11px] font-semibold text-slate-400 mb-1">Colaborador Destino *</label>
                         <select
                           value={form.targetSellerId}
                           onChange={(e) => setForm({ ...form, targetSellerId: e.target.value })}
