@@ -122,6 +122,8 @@ CREATE TABLE IF NOT EXISTS raffles (
   live_stream_url TEXT,
   sales_cutoff_date TEXT,
   sales_cutoff_time TEXT,
+  sales_enabled BOOLEAN DEFAULT TRUE,
+  auto_tombola BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -364,6 +366,21 @@ BEGIN
   END;
   BEGIN
     ALTER TABLE config ADD COLUMN currency TEXT DEFAULT 'USD';
+  EXCEPTION
+    WHEN duplicate_column THEN NULL;
+  END;
+END $$;
+
+-- Agregar de forma segura las columnas 'sales_enabled' y 'auto_tombola' a la tabla 'raffles' por si la tabla ya existe
+DO $$
+BEGIN
+  BEGIN
+    ALTER TABLE raffles ADD COLUMN sales_enabled BOOLEAN DEFAULT TRUE;
+  EXCEPTION
+    WHEN duplicate_column THEN NULL;
+  END;
+  BEGIN
+    ALTER TABLE raffles ADD COLUMN auto_tombola BOOLEAN DEFAULT TRUE;
   EXCEPTION
     WHEN duplicate_column THEN NULL;
   END;
