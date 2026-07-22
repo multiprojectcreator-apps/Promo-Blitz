@@ -369,7 +369,7 @@ export default function SellersSection({
         <div className="space-y-4">
           <p className="text-xs text-slate-400">Supervise y gestione las licencias y los colaboradores de la rifa. Las licencias libres pueden ser vinculadas en cualquier momento por colaboradores usando el código único.</p>
             
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
             {sellers.map((s, index) => {
               const isLinked = !!s.userId;
               const sUsername = s.username || 'Por registrar';
@@ -378,98 +378,101 @@ export default function SellersSection({
               return (
                 <motion.div 
                   key={`${s.id}-${index}`} 
-                  whileHover={{ scale: 1.03, y: -4 }}
+                  whileHover={{ scale: 1.01, y: -2 }}
                   transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                  className={`p-3 sm:p-4 border rounded-2xl flex flex-col justify-between shadow-lg space-y-3 transition-all cursor-pointer ${
+                  className={`p-4 sm:p-5 border rounded-2xl flex flex-col justify-between shadow-xl space-y-3.5 transition-all cursor-pointer ${
                     isLinked 
                       ? 'bg-slate-950 border-slate-800 hover:border-pink-500/40 hover:shadow-pink-500/5' 
-                      : 'bg-slate-950/60 border-purple-500/10 ring-1 ring-purple-500/5 hover:border-purple-500/40 hover:shadow-purple-500/5'
+                      : 'bg-slate-950/60 border-purple-500/15 ring-1 ring-purple-500/10 hover:border-purple-500/40 hover:shadow-purple-500/5'
                   }`}
                 >
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className={`w-2 h-2 rounded-full ${isLinked ? 'bg-pink-500' : 'bg-purple-500 animate-pulse'}`}></span>
-                        <h4 className="text-sm font-bold text-white">{s.name}</h4>
+                  {/* Card Header: Collaborator Name, Indicator & Action Buttons */}
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${isLinked ? 'bg-pink-500 shadow-sm shadow-pink-500/50' : 'bg-purple-500 animate-pulse shadow-sm shadow-purple-500/50'}`}></span>
+                        <h4 className="text-sm sm:text-base font-bold text-white truncate font-display">{s.name}</h4>
                       </div>
-                      <p className="text-[10px] text-slate-500 font-mono mt-0.5">ID: {s.id.slice(0, 8)}</p>
+                      <p className="text-[10px] text-slate-500 font-mono mt-0.5 pl-4">ID: {s.id.slice(0, 8)}</p>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
                       <button 
                         type="button"
                         onClick={() => handleBlockSeller(s.id, s.status || 'ACTIVE')}
-                        className={`px-2 py-1 rounded-lg text-[9px] uppercase font-bold transition cursor-pointer border ${s.status === 'ACTIVE' ? 'bg-pink-500/10 text-pink-400 border-pink-500/20 hover:bg-pink-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20'}`}
+                        className={`px-2.5 py-1 rounded-xl text-[9px] sm:text-[10px] uppercase font-black tracking-wider transition cursor-pointer border min-h-[28px] ${s.status === 'ACTIVE' ? 'bg-pink-500/10 text-pink-400 border-pink-500/20 hover:bg-pink-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20'}`}
                       >
                         {s.status === 'ACTIVE' ? 'Activo' : 'Bloqueado'}
                       </button>
                       <button 
                         type="button"
                         onClick={() => handleDeleteSeller(s.id)}
-                        className="text-slate-500 hover:text-rose-400 p-1.5 hover:bg-rose-500/10 rounded-lg transition-all cursor-pointer"
+                        className="text-slate-500 hover:text-rose-400 p-2 hover:bg-rose-500/10 rounded-xl transition-all cursor-pointer min-w-[32px] min-h-[32px] flex items-center justify-center"
                         title="Eliminar Licencia"
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={15} />
                       </button>
                     </div>
                   </div>
 
-                  <div className="bg-slate-900/60 p-3 rounded-xl border border-slate-800 space-y-1 text-xs text-slate-300">
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Rango Asignado:</span>
-                      <strong className="text-white font-mono font-bold">#{s.assignedRangeStart} al #{s.assignedRangeEnd}</strong>
+                  {/* Card Main Info Block */}
+                  <div className="bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800/80 space-y-2 text-xs text-slate-300">
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-400 font-medium">Rango Asignado:</span>
+                      <strong className="text-white font-mono font-bold bg-slate-950 px-2.5 py-0.5 rounded-lg border border-slate-800 text-xs">#{s.assignedRangeStart} al #{s.assignedRangeEnd}</strong>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Estado:</span>
-                      <span className={`font-bold ${isLinked ? 'text-pink-400' : 'text-purple-400 animate-pulse'}`}>
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-400 font-medium">Estado:</span>
+                      <span className={`font-bold text-[11px] ${isLinked ? 'text-pink-400' : 'text-purple-400 animate-pulse'}`}>
                         {isLinked ? 'VINCULADO (Cuenta activa)' : 'LICENCIA LIBRE (Listo para vincular)'}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center pt-1 border-t border-slate-850 mt-1">
+                    <div className="flex justify-between items-center pt-2 border-t border-slate-800 mt-1">
                       <span className="flex items-center gap-1 text-[11px] font-bold text-slate-400">
                         <Key size={12} className="text-slate-500" /> CÓDIGO DE ENLACE:
                       </span>
-                      <span className="font-mono font-bold text-[11px] bg-slate-950 text-pink-400 px-2 py-0.5 rounded border border-slate-800 select-all">
+                      <span className="font-mono font-bold text-[11px] bg-slate-950 text-pink-400 px-2.5 py-1 rounded-lg border border-slate-800 select-all tracking-wider">
                         {s.linkingCode}
                       </span>
                     </div>
                   </div>
 
+                  {/* Card Footer: QR & Link Sharing */}
                   {isLinked ? (
-                    <div className="flex items-center gap-3 bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                    <div className="flex items-center gap-3 bg-slate-900/90 p-3 rounded-2xl border border-slate-800">
                       <img 
                         src={sQRUrl} 
                         alt="Colaborador QR" 
                         referrerPolicy="no-referrer"
-                        className="w-12 h-12 rounded border border-slate-800 shrink-0" 
+                        className="w-14 h-14 rounded-xl border border-slate-800 shrink-0 object-cover" 
                       />
                       <div className="flex-1 min-w-0">
                         <p className="text-[9px] text-slate-500 uppercase font-bold tracking-wider">Enlace del Colaborador</p>
-                        <p className="text-xs font-semibold text-slate-200 truncate font-mono">{sLink}</p>
-                        <div className="flex gap-2 mt-1">
+                        <p className="text-xs font-semibold text-slate-200 truncate font-mono mt-0.5">{sLink}</p>
+                        <div className="flex gap-3 mt-1.5">
                           <button 
                             type="button"
                             onClick={() => {
                               navigator.clipboard.writeText(sLink);
                               alert("¡Enlace del colaborador copiado al portapapeles!");
                             }}
-                            className="text-[10px] text-pink-400 hover:underline font-semibold flex items-center gap-0.5 cursor-pointer"
+                            className="text-[11px] text-pink-400 hover:text-pink-300 font-bold flex items-center gap-1 cursor-pointer transition-colors"
                           >
-                            <Link2 size={10} /> Copiar enlace
+                            <Link2 size={12} /> Copiar enlace
                           </button>
                           <a 
                             href={sQRUrl}
                             target="_blank"
                             rel="noreferrer"
                             referrerPolicy="no-referrer"
-                            className="text-[10px] text-purple-400 hover:underline font-semibold flex items-center gap-0.5 cursor-pointer"
+                            className="text-[11px] text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1 cursor-pointer transition-colors"
                           >
-                            <Share2 size={10} /> Ver QR grande
+                            <Share2 size={12} /> Ver QR grande
                           </a>
                         </div>
                       </div>
                     </div>
                   ) : (
-                    <div className="text-[10.5px] text-purple-300 leading-normal bg-purple-950/15 p-2.5 rounded-xl border border-purple-900/20">
+                    <div className="text-[11px] text-purple-300 leading-relaxed bg-purple-950/20 p-3 rounded-2xl border border-purple-900/30">
                       💡 Comparte el <strong>Código de Enlace</strong> anterior con la persona que vaya a ser tu colaborador para que se registre por sí misma.
                     </div>
                   )}
