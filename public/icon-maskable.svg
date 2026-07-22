@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- Fullscreen Background for Safe Masking Zone -->
+  <rect x="0" y="0" width="512" height="512" fill="#050212" />
+  <circle cx="256" cy="256" r="220" fill="#0c0728" />
+
+  <defs>
+    <!-- Ticket Gradient -->
+    <linearGradient id="ticketGradM" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="50%" stop-color="#ec4899" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+
+    <!-- Blitz Lightning Gradient -->
+    <linearGradient id="blitzGradM" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="30%" stop-color="#fef08a" />
+      <stop offset="70%" stop-color="#facc15" />
+      <stop offset="100%" stop-color="#f97316" />
+    </linearGradient>
+
+    <!-- Glow Filter -->
+    <filter id="superGlowM" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="14" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Scaled & Centered Content inside standard 80% Safe Area (320x320 centered at 256,256) -->
+  <g transform="translate(16, 16) scale(0.93)">
+    <!-- Ticket Outer Badge -->
+    <g transform="rotate(-10, 256, 230)" filter="url(#superGlowM)">
+      <path d="M 125 150 
+               A 22 22 0 0 0 125 194 
+               L 125 270 
+               A 22 22 0 0 0 125 314 
+               L 387 314 
+               A 22 22 0 0 0 387 270 
+               L 387 194 
+               A 22 22 0 0 0 387 150 
+               Z" 
+            fill="url(#ticketGradM)" 
+            stroke="#ffffff" 
+            stroke-width="4" 
+            stroke-opacity="0.4" />
+
+      <!-- Dashed Line -->
+      <line x1="310" y1="154" x2="310" y2="310" stroke="#ffffff" stroke-dasharray="8 8" stroke-width="3" opacity="0.6" />
+
+      <!-- Side Notches -->
+      <circle cx="125" cy="172" r="20" fill="#0c0728" />
+      <circle cx="125" cy="292" r="20" fill="#0c0728" />
+      <circle cx="387" cy="172" r="20" fill="#0c0728" />
+      <circle cx="387" cy="292" r="20" fill="#0c0728" />
+    </g>
+
+    <!-- High-Energy Blitz Lightning Emblem -->
+    <path d="M 275 85 
+             L 175 255 
+             L 252 255 
+             L 215 410 
+             L 345 220 
+             L 268 220 
+             Z" 
+          fill="url(#blitzGradM)" 
+          stroke="#ffffff" 
+          stroke-width="3.5" 
+          filter="url(#superGlowM)" />
+
+    <!-- Inner Lightning Highlight -->
+    <polygon points="268,105 190,245 245,245 224,375 325,215 260,215" fill="#ffffff" opacity="0.5" />
+  </g>
+</svg>

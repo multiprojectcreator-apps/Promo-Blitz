@@ -1,0 +1,31 @@
+{
+  "name": "Promo Blitz | Impulsa tus Campañas",
+  "short_name": "PromoBlitz",
+  "description": "Plataforma de alta velocidad para la creación y gestión de campañas promocionales, fidelización de clientes y atribución de ventas en tiempo real.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050212",
+  "theme_color": "#0c0728",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

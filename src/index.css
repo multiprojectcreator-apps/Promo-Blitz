@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Dark Mode / Material 3 Design Foundation */
+body {
+  font-family: var(--font-sans);
+  background-color: #050212; /* Dark Cosmic theme base */
+  color: #cbd5e1; /* Deep slate light text color */
+  overflow-x: hidden;
+}
+
+.m3-card {
+  background-color: #0d072b; /* Deep purple slate card surface */
+  border: 1px solid rgba(168, 85, 247, 0.25); /* Soft purple border */
+  border-radius: 1.25rem;
+  color: #f1f5f9;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 2px 8px -1px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.m3-card:hover {
+  border-color: rgba(236, 72, 153, 0.4); /* Pink accent border on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -4px rgba(168, 85, 247, 0.25), 0 4px 12px -2px rgba(236, 72, 153, 0.15);
+}
+
+.m3-btn {
+  border-radius: 6.25rem; /* Capsule shaped buttons standard in M3 */
+  font-weight: 500;
+  transition: all 0.15s ease-in-out;
+}
+
+/* Custom scrollbars for light theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
