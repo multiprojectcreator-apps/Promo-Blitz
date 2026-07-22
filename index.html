@@ -14,37 +14,74 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     
-    <!-- SEO Meta Tags para Optimización de Algoritmos Web -->
-    <meta name="description" content="Promo Blitz es la plataforma definitiva de marketing y campañas promocionales de alto impacto. Diseña, gestiona y acelera tus ventas con distribución viral, atribución en tiempo real y dinámicas de fidelización de última generación." />
-    <meta name="keywords" content="Promo Blitz, marketing promocional, promocionales, campañas de mercadeo, fidelización de clientes, ventas aceleradas, marketing interactivo, cupones digitales, embudos de conversión" />
+    <!-- SEO Meta Tags para Optimización de Algoritmos Web y Posicionamiento Google -->
+    <meta name="description" content="Promo Blitz es la plataforma definitiva de marketing, sorteos y campañas promocionales de alto impacto. Diseña, gestiona y acelera tus ventas con distribución viral, atribución en tiempo real y dinámicas de fidelización de última generación." />
+    <meta name="keywords" content="Promo Blitz, marketing promocional, sorteos en linea, rifas digitales, boletos, promocionales, campañas de mercadeo, fidelización de clientes, ventas aceleradas, marketing interactivo, cupones digitales, embudos de conversión" />
     <meta name="author" content="Promo Blitz" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://promoblitz.app/" />
     
-    <!-- Open Graph / Facebook -->
+    <!-- Resource Hints para Velocidad y Rendimiento SEO -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+
+    <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Promo Blitz | Impulsa tus Campañas y Ventas Promocionales" />
-    <meta property="og:description" content="Crea campañas de impacto inmediato y maximiza el engagement con Promo Blitz, la solución líder en marketing interactivo y fidelización." />
+    <meta property="og:site_name" content="Promo Blitz" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:title" content="Promo Blitz | Impulsa tus Campañas, Sorteos y Ventas Promocionales" />
+    <meta property="og:description" content="Crea campañas de impacto inmediato, gestiona sorteos oficiales y maximiza el engagement con Promo Blitz, la solución líder en marketing interactivo y fidelización." />
+    <meta property="og:image" content="/icon.svg" />
     
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:title" content="Promo Blitz | Impulsa tus Campañas y Ventas Promocionales" />
-    <meta property="twitter:description" content="Crea campañas de impacto inmediato y maximiza el engagement con Promo Blitz, la solución líder en marketing interactivo y fidelización." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@PromoBlitz" />
+    <meta name="twitter:title" content="Promo Blitz | Impulsa tus Campañas, Sorteos y Ventas Promocionales" />
+    <meta name="twitter:description" content="Crea campañas de impacto inmediato, gestiona sorteos oficiales y maximiza el engagement con Promo Blitz, la solución líder en marketing interactivo y fidelización." />
+    <meta name="twitter:image" content="/icon.svg" />
 
-    <!-- Datos Estructurados Schema.org para Posicionamiento SEO -->
+    <!-- Datos Estructurados Schema.org para Posicionamiento Google -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Promo Blitz",
-        "alternateName": "PromoBlitz",
-        "description": "Plataforma de alta velocidad para la creación y gestión de campañas promocionales, fidelización de clientes y atribución de ventas en tiempo real.",
-        "applicationCategory": "BusinessApplication",
-        "operatingSystem": "All",
-        "offers": {
-          "@type": "Offer",
-          "price": "0.00",
-          "priceCurrency": "USD"
-        }
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://promoblitz.app/#organization",
+            "name": "Promo Blitz",
+            "url": "https://promoblitz.app/",
+            "logo": "https://promoblitz.app/icon.svg",
+            "sameAs": [
+              "https://twitter.com/PromoBlitz"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://promoblitz.app/#website",
+            "url": "https://promoblitz.app/",
+            "name": "Promo Blitz",
+            "description": "Plataforma de alta velocidad para la creación y gestión de campañas promocionales, sorteos oficiales y fidelización de clientes.",
+            "publisher": {
+              "@id": "https://promoblitz.app/#organization"
+            },
+            "inLanguage": "es"
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://promoblitz.app/#webapp",
+            "name": "Promo Blitz",
+            "alternateName": "PromoBlitz App",
+            "description": "Plataforma de alta velocidad para la creación y gestión de campañas promocionales, fidelización de clientes y atribución de ventas en tiempo real.",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "All",
+            "offers": {
+              "@type": "Offer",
+              "price": "0.00",
+              "priceCurrency": "USD"
+            }
+          }
+        ]
       }
     </script>
   </head>

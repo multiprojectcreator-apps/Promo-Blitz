@@ -1171,53 +1171,120 @@ app.use(async (req: Request, res: Response, next) => {
   // 3. Dynamic SEO page middleware (Meta, Open Graph, and JSON-LD Structured Schema)
   const serveSEOIndexedPage = async (req: Request, res: Response) => {
     try {
-      const activeRaffle = dbInstance.raffles.find(r => r.status === 'ACTIVE') || dbInstance.raffles[0];
-      const raffleName = activeRaffle ? activeRaffle.name : 'Sistema de Rifa Profesional';
-      const rafflePrize = activeRaffle ? activeRaffle.prize : 'Premios increíbles';
-      const raffleDesc = activeRaffle ? activeRaffle.description : 'Participa en nuestros sorteos oficiales y gana grandes premios de forma segura y transparente.';
+      const host = req.get('host') || 'localhost:3000';
+      const protocol = req.secure || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
+      const baseUrl = `${protocol}://${host}`;
+
+      // Check if a specific raffle ID is passed in query string (?sorteo= or ?raffle=)
+      const requestedRaffleId = (req.query.sorteo || req.query.raffle) as string | undefined;
+      let activeRaffle = requestedRaffleId 
+        ? dbInstance.raffles.find(r => r.id === requestedRaffleId) 
+        : undefined;
+
+      if (!activeRaffle) {
+        activeRaffle = dbInstance.raffles.find(r => r.status === 'ACTIVE') || dbInstance.raffles[0];
+      }
+
+      const raffleName = activeRaffle ? activeRaffle.name : 'Promo Blitz | Sorteos y Campañas Promocionales';
+      const rafflePrize = activeRaffle ? activeRaffle.prize : 'Premios Increíbles';
+      const raffleDesc = activeRaffle ? activeRaffle.description : 'Participa en los sorteos oficiales de Promo Blitz y gana grandes premios con total transparencia, seguridad y rapidez.';
       const ticketPrice = activeRaffle ? activeRaffle.ticketPrice : 10;
       const currency = dbInstance.config?.currency || 'USD';
+      const bannerUrl = (activeRaffle as any)?.bannerUrl || (activeRaffle as any)?.imageUrl || `${baseUrl}/icon.svg`;
+      const currentCanonical = requestedRaffleId ? `${baseUrl}/?sorteo=${requestedRaffleId}` : `${baseUrl}${req.path}`;
 
-      // Dynamic Meta & Open Graph Tags
+      // Dynamic Meta, Open Graph, and Twitter Tags
       const metaTags = `
-    <title>${raffleName} | Sorteo Oficial</title>
+    <title>${raffleName} | Promo Blitz Sorteos</title>
     <meta name="description" content="${raffleDesc}" />
-    <meta name="keywords" content="rifas, sorteos, boletos, loteria, ganar premios, ${raffleName.toLowerCase()}" />
-    <!-- Open Graph (Facebook, WhatsApp) -->
-    <meta property="og:title" content="${raffleName} - ¡Gana ${rafflePrize}!" />
-    <meta property="og:description" content="${raffleDesc} Precio de boleto: ${ticketPrice} ${currency}." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://${req.get('host')}${req.originalUrl}" />
-    <meta property="og:image" content="https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?auto=format&fit=crop&w=1200&h=630&q=80" />
+    <meta name="keywords" content="rifas, sorteos, boletos, loteria, ganar premios, ${raffleName.toLowerCase()}, promo blitz, marketing promocional" />
+    <meta name="author" content="Promo Blitz" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="${currentCanonical}" />
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:site_name" content="Promo Blitz" />
     <meta property="og:locale" content="es_ES" />
+    <meta property="og:type" content="${activeRaffle ? 'product' : 'website'}" />
+    <meta property="og:title" content="${raffleName} - ¡Gana ${rafflePrize}!" />
+    <meta property="og:description" content="${raffleDesc} Boleto: ${ticketPrice} ${currency}." />
+    <meta property="og:url" content="${currentCanonical}" />
+    <meta property="og:image" content="${bannerUrl}" />
+
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@PromoBlitz" />
     <meta name="twitter:title" content="${raffleName} - ¡Gana ${rafflePrize}!" />
     <meta name="twitter:description" content="${raffleDesc}" />
-    <meta name="twitter:image" content="https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?auto=format&fit=crop&w=1200&h=630&q=80" />
+    <meta name="twitter:image" content="${bannerUrl}" />
       `;
 
-      // Structured Data (JSON-LD Schema.org Event/Product)
+      // Rich Schema.org JSON-LD Structured Data
       const jsonLd = {
         "@context": "https://schema.org",
-        "@type": "Event",
-        "name": raffleName,
-        "description": raffleDesc,
-        "startDate": activeRaffle ? activeRaffle.startDate : new Date().toISOString(),
-        "endDate": activeRaffle ? activeRaffle.endDate : new Date(Date.now() + 30*24*60*60*1000).toISOString(),
-        "eventStatus": "https://schema.org/EventScheduled",
-        "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
-        "location": {
-          "@type": "VirtualLocation",
-          "url": `https://${req.get('host')}`
-        },
-        "offers": {
-          "@type": "Offer",
-          "price": ticketPrice,
-          "priceCurrency": currency,
-          "availability": "https://schema.org/InStock",
-          "url": `https://${req.get('host')}`
-        }
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": `${baseUrl}/#organization`,
+            "name": "Promo Blitz",
+            "url": baseUrl,
+            "logo": `${baseUrl}/icon.svg`
+          },
+          {
+            "@type": "WebSite",
+            "@id": `${baseUrl}/#website`,
+            "url": baseUrl,
+            "name": "Promo Blitz",
+            "description": "Plataforma líder para la gestión de sorteos oficiales y promociones digitales.",
+            "publisher": { "@id": `${baseUrl}/#organization` },
+            "inLanguage": "es"
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": `${currentCanonical}#breadcrumb`,
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Inicio",
+                "item": baseUrl
+              },
+              ...(activeRaffle ? [{
+                "@type": "ListItem",
+                "position": 2,
+                "name": activeRaffle.name,
+                "item": `${baseUrl}/?sorteo=${activeRaffle.id}`
+              }] : [])
+            ]
+          },
+          ...(activeRaffle ? [{
+            "@type": "Event",
+            "@id": `${baseUrl}/?sorteo=${activeRaffle.id}#event`,
+            "name": activeRaffle.name,
+            "description": raffleDesc,
+            "startDate": activeRaffle.startDate || new Date().toISOString(),
+            "endDate": activeRaffle.endDate || new Date(Date.now() + 30*24*60*60*1000).toISOString(),
+            "eventStatus": "https://schema.org/EventScheduled",
+            "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+            "location": {
+              "@type": "VirtualLocation",
+              "url": baseUrl
+            },
+            "image": [bannerUrl],
+            "organizer": {
+              "@type": "Organization",
+              "name": "Promo Blitz",
+              "url": baseUrl
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": ticketPrice,
+              "priceCurrency": currency,
+              "availability": "https://schema.org/InStock",
+              "url": `${baseUrl}/?sorteo=${activeRaffle.id}`
+            }
+          }] : [])
+        ]
       };
 
       const jsonLdScript = `\n<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n</script>\n`;
@@ -1228,17 +1295,17 @@ app.use(async (req: Request, res: Response, next) => {
 
       let html = await fs.readFile(indexHtmlPath, 'utf8');
 
-      // Remove standard basic title to avoid duplicates
+      // Remove default title and canonical tags to avoid duplicates
       html = html.replace(/<title>.*?<\/title>/gi, '');
+      html = html.replace(/<link rel="canonical".*?\/>/gi, '');
 
-      // Inject metaTags and jsonLdScript into the <head>
+      // Inject enhanced metaTags and jsonLdScript into <head>
       html = html.replace('<head>', `<head>${metaTags}${jsonLdScript}`);
       
-      res.set('Content-Type', 'text/html');
+      res.set('Content-Type', 'text/html; charset=utf-8');
       res.send(html);
     } catch (err) {
       console.error('[SEO Ingestion Error]', err);
-      // Fallback
       if (process.env.NODE_ENV === 'production') {
         res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
       } else {

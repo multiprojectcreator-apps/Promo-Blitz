@@ -44,6 +44,7 @@ import SplashScreen from './components/common/SplashScreen';
 import LegalModal from './components/common/LegalModal';
 import ComplianceBanner from './components/common/ComplianceBanner';
 import SuperAdminPanel from './components/superadmin/SuperAdminPanel';
+import SEOHead from './components/common/SEOHead';
 
 import { useRaffleSystem } from './hooks/useRaffleSystem';
 
@@ -258,6 +259,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#050212] text-slate-200 flex flex-col font-sans pb-10 select-none">
+      <SEOHead activeRaffle={activeRaffle} />
       
       {/* HEADER BAR */}
       <Header
