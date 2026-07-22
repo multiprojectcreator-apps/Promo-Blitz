@@ -18,7 +18,7 @@ if (supabaseUrl) {
   supabaseUrl = supabaseUrl.replace(/\/$/, ''); // Remove trailing slash
 }
 
-let supabase: any = null;
+export let supabase: any = null;
 if (supabaseUrl && supabaseKey) {
   try {
     supabase = createClient(supabaseUrl, supabaseKey);
@@ -666,7 +666,7 @@ export class Database {
         try {
           const { data, error } = await supabase.from('sellers').select('*');
           if (error) throw error;
-          if (data && data.length > 0) {
+          if (data) {
             this.sellers = data.map((s: any) => ({
               id: s.id,
               userId: s.user_id,
@@ -719,7 +719,7 @@ export class Database {
         try {
           const { data, error } = await supabase.from('sales').select('*');
           if (error) throw error;
-          if (data && data.length > 0) {
+          if (data) {
             this.sales = data.map((s: any) => ({
               id: s.id,
               raffleId: s.raffle_id,
@@ -747,7 +747,7 @@ export class Database {
         try {
           const { data, error } = await supabase.from('audit_logs').select('*');
           if (error) throw error;
-          if (data && data.length > 0) {
+          if (data) {
             this.auditLogs = data.map((a: any) => ({
               id: a.id,
               timestamp: a.timestamp,
@@ -850,7 +850,7 @@ export class Database {
         try {
           const { data, error } = await supabase.from('prizes').select('*');
           if (error) throw error;
-          if (data && data.length > 0) {
+          if (data) {
             this.prizes = data.map((p: any) => ({
               id: p.id,
               raffleId: p.raffle_id,
@@ -897,7 +897,7 @@ export class Database {
         try {
           const { data, error } = await supabase.from('app_visits').select('*');
           if (error) throw error;
-          if (data && data.length > 0) {
+          if (data) {
             this.appVisits = data.map((v: any) => ({
               id: v.id,
               timestamp: v.timestamp,
@@ -3635,6 +3635,18 @@ CREATE POLICY "Permitir todo a anon y authenticated" ON verification_tokens FOR 
           sales_enabled: true,
           auto_tombola: true
         });
+
+        for (const prize of this.prizes) {
+          await this.syncToSupabase('prizes', {
+            id: prize.id,
+            raffle_id: prize.raffleId,
+            name: prize.name,
+            description: prize.description,
+            enabled: prize.enabled,
+            order_num: prize.order,
+            budget: prize.budget
+          });
+        }
       } catch (err: any) {
         console.error('Error clearing Supabase tables during factory reset:', err.message);
       }

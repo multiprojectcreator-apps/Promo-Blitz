@@ -8,7 +8,7 @@ import path from 'path';
 import http from 'http';
 import fs from 'fs/promises';
 import { WebSocketServer, WebSocket } from 'ws';
-import { dbInstance } from './server/db';
+import { dbInstance, supabase } from './server/db';
 import { paymentService } from './server/services/PaymentService';
 import { notificationService } from './server/services/NotificationService';
 
@@ -440,7 +440,24 @@ app.use(async (req: Request, res: Response, next) => {
   });
 
   // Get active configurations
-  app.get('/api/config', (req: Request, res: Response) => {
+  app.get('/api/config', async (req: Request, res: Response) => {
+    if (supabase) {
+      try {
+        const { data: configData } = await supabase.from('config').select('*').limit(1);
+        if (configData && configData.length > 0) {
+          const cfg = configData[0];
+          dbInstance.config = {
+            id: cfg.id || 'cfg-default',
+            allowOfflineSync: cfg.allow_offline_sync !== false,
+            maxFailedAttempts: cfg.max_failed_attempts ?? 5,
+            commissionPercentage: Number(cfg.commission_percentage ?? 10.0),
+            currency: cfg.currency || 'USD'
+          };
+        }
+      } catch (e) {
+        // Fallback to memory config
+      }
+    }
     res.json(dbInstance.config);
   });
 
@@ -463,7 +480,14 @@ app.use(async (req: Request, res: Response, next) => {
   });
 
   // Get all raffles
-  app.get('/api/raffles', (req: Request, res: Response) => {
+  app.get('/api/raffles', async (req: Request, res: Response) => {
+    if (supabase) {
+      try {
+        await dbInstance.syncRafflesFromSupabase();
+      } catch (e) {
+        // Fallback to memory raffles
+      }
+    }
     res.json(dbInstance.raffles);
   });
 
@@ -647,9 +671,17 @@ app.use(async (req: Request, res: Response, next) => {
   });
 
   // Get Raffle Stats
-  app.get('/api/stats/:raffleId', (req: Request, res: Response) => {
+  app.get('/api/stats/:raffleId', async (req: Request, res: Response) => {
     try {
       const raffleId = req.params.raffleId;
+      if (supabase) {
+        try {
+          await dbInstance.syncSalesFromSupabase();
+          await dbInstance.syncSellersFromSupabase();
+        } catch (e) {
+          // Fallback to memory
+        }
+      }
       dbInstance.cleanupExpiredReservations();
       const stats = dbInstance.getStats(raffleId);
       res.json(stats);
