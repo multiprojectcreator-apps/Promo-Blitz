@@ -1719,9 +1719,6 @@ export default function App() {
           <span>•</span>
           <button onClick={() => openLegalModalWithTab('rules')} className="hover:text-pink-300 hover:underline cursor-pointer transition">Reglamento del Sorteo & Juego Responsable</button>
         </div>
-        <p className="text-[10px] mt-2 text-purple-300/30">
-          Diseñado bajo los estándares de Clean Architecture, Cumplimiento de Juego Responsable, y Material Design 3.
-        </p>
       </footer>
 
       <LegalModal
