@@ -221,11 +221,11 @@ export default function SuperAdminPanel({ currentUser }: SuperAdminPanelProps) {
       </div>
 
       {/* TABS (Modular & Scalable) */}
-      <div id="super-admin-tabs" className="flex border-b border-purple-500/20 gap-2 mb-6">
+      <div id="super-admin-tabs" className="flex overflow-x-auto whitespace-nowrap no-scrollbar border-b border-purple-500/20 gap-1 sm:gap-2 mb-6 pb-0.5 max-w-full">
         <button
           id="tab-btn-organizadores"
           onClick={() => setActiveTab('organizadores')}
-          className={`px-5 py-3 text-xs font-black uppercase tracking-wider transition relative border-b-2 ${
+          className={`shrink-0 whitespace-nowrap px-4 sm:px-5 py-3 text-xs font-black uppercase tracking-wider transition relative border-b-2 ${
             activeTab === 'organizadores' 
               ? 'text-pink-400 border-pink-500' 
               : 'text-purple-300/60 border-transparent hover:text-purple-300'
@@ -240,7 +240,7 @@ export default function SuperAdminPanel({ currentUser }: SuperAdminPanelProps) {
         <button
           id="tab-btn-integraciones"
           onClick={() => setActiveTab('integraciones')}
-          className={`px-5 py-3 text-xs font-black uppercase tracking-wider transition relative border-b-2 ${
+          className={`shrink-0 whitespace-nowrap px-4 sm:px-5 py-3 text-xs font-black uppercase tracking-wider transition relative border-b-2 ${
             activeTab === 'integraciones' 
               ? 'text-pink-400 border-pink-500' 
               : 'text-purple-300/60 border-transparent hover:text-purple-300'
@@ -258,7 +258,7 @@ export default function SuperAdminPanel({ currentUser }: SuperAdminPanelProps) {
         <button
           id="tab-btn-auditoria"
           onClick={() => setActiveTab('auditoria')}
-          className={`px-5 py-3 text-xs font-black uppercase tracking-wider transition relative border-b-2 ${
+          className={`shrink-0 whitespace-nowrap px-4 sm:px-5 py-3 text-xs font-black uppercase tracking-wider transition relative border-b-2 ${
             activeTab === 'auditoria' 
               ? 'text-pink-400 border-pink-500' 
               : 'text-purple-300/60 border-transparent hover:text-purple-300'
@@ -273,7 +273,7 @@ export default function SuperAdminPanel({ currentUser }: SuperAdminPanelProps) {
         <button
           id="tab-btn-mantenimiento"
           onClick={() => setActiveTab('mantenimiento')}
-          className={`px-5 py-3 text-xs font-black uppercase tracking-wider transition relative border-b-2 ${
+          className={`shrink-0 whitespace-nowrap px-4 sm:px-5 py-3 text-xs font-black uppercase tracking-wider transition relative border-b-2 ${
             activeTab === 'mantenimiento' 
               ? 'text-pink-400 border-pink-500' 
               : 'text-purple-300/60 border-transparent hover:text-purple-300'
